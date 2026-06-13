@@ -1,4 +1,4 @@
-package br.com.fiap.gastrohub_api;
+package br.com.fiap.gastrohubapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
