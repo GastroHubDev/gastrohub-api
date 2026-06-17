@@ -18,7 +18,7 @@ Current focus:
 * Menu Item CRUD
 * Swagger/OpenAPI documentation
 * Automated tests
-* Docker environment
+* Docker 
 
 ## Tech Stack
 
