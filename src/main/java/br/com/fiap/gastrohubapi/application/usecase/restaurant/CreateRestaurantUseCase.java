@@ -1,8 +1,8 @@
-package br.com.fiap.gastrohubapi.application.usecase;
+package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
-import br.com.fiap.gastrohubapi.interfaces.IRestaurantGateway;
+import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
 import br.com.fiap.gastrohubapi.presentation.dto.request.NewRestaurantDTO;
 
 public class CreateRestaurantUseCase {

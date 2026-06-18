@@ -1,4 +1,4 @@
-package br.com.fiap.gastrohubapi.interfaces;
+package br.com.fiap.gastrohubapi.application.gateway;
 
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.domain.entity.User;
