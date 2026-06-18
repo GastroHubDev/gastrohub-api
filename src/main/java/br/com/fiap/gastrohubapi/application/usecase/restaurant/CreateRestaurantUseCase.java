@@ -1,15 +1,16 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
+import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
 import br.com.fiap.gastrohubapi.presentation.dto.request.NewRestaurantDTO;
 
 public class CreateRestaurantUseCase {
-    private final IRestaurantGateway gateway;
+    private final IRestaurantGateway restaurantGateway;
 
     private CreateRestaurantUseCase(IRestaurantGateway gateway) {
-        this.gateway = gateway;
+        this.restaurantGateway = gateway;
     }
 
     public static CreateRestaurantUseCase create(IRestaurantGateway gateway) {
@@ -17,11 +18,13 @@ public class CreateRestaurantUseCase {
     }
 
     public Restaurant run(NewRestaurantDTO newRestaurantDTO) throws RestaurantAlreadyExistsException {
-        final Restaurant existingRestaurant = gateway.findById(newRestaurantDTO.id());
+        final Restaurant existingRestaurant = restaurantGateway.findById(newRestaurantDTO.id());
 
         if (existingRestaurant != null) {
             throw new RestaurantAlreadyExistsException(newRestaurantDTO.name());
         }
+
+
 
         final Restaurant newRestaurant = Restaurant.create(
                 newRestaurantDTO.id(),
@@ -32,7 +35,7 @@ public class CreateRestaurantUseCase {
                 newRestaurantDTO.restaurantOwner()
         );
 
-        Restaurant restaurant = gateway.create(newRestaurant);
+        Restaurant restaurant = restaurantGateway.create(newRestaurant);
         return restaurant;
     }
 }
