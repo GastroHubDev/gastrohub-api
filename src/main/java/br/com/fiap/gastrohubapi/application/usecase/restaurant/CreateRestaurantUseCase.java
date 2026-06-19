@@ -1,41 +1,52 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
+import br.com.fiap.gastrohubapi.application.gateway.IUserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
-import br.com.fiap.gastrohubapi.presentation.dto.request.NewRestaurantDTO;
+import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
+import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
+import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
 
 public class CreateRestaurantUseCase {
     private final IRestaurantGateway restaurantGateway;
+    private final IUserGateway userGateway;
 
-    private CreateRestaurantUseCase(IRestaurantGateway gateway) {
-        this.restaurantGateway = gateway;
+    private CreateRestaurantUseCase(IRestaurantGateway restaurantGateway, IUserGateway userGateway) {
+        this.restaurantGateway = restaurantGateway;
+        this.userGateway = userGateway;
     }
 
-    public static CreateRestaurantUseCase create(IRestaurantGateway gateway) {
-        return new CreateRestaurantUseCase(gateway);
+    public static CreateRestaurantUseCase create(IRestaurantGateway restaurantGateway, IUserGateway userGateway) {
+        return new CreateRestaurantUseCase(restaurantGateway, userGateway);
     }
 
-    public Restaurant run(NewRestaurantDTO newRestaurantDTO) throws RestaurantAlreadyExistsException {
-        final Restaurant existingRestaurant = restaurantGateway.findById(newRestaurantDTO.id());
+    public Restaurant run(NewRestaurantInput newRestaurantInput) {
+        final Restaurant existingRestaurant = restaurantGateway.findByName(newRestaurantInput.name());
 
         if (existingRestaurant != null) {
-            throw new RestaurantAlreadyExistsException(newRestaurantDTO.name());
+            throw new RestaurantAlreadyExistsException("Some restaurant already exists with this name: " + newRestaurantInput.name());
         }
 
+        final User existingUser = userGateway.findById(newRestaurantInput.restaurantOwnerId());
 
+        if (existingUser == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        if (existingUser.isClient()) {
+            throw new UserTypeNotAllowedForRestaurantOwnerException("The restaurantOwnerId cannot be a CLIENT BaseCategory User");
+        }
 
         final Restaurant newRestaurant = Restaurant.create(
-                newRestaurantDTO.id(),
-                newRestaurantDTO.name(),
-                newRestaurantDTO.address(),
-                newRestaurantDTO.kitchenType(),
-                newRestaurantDTO.openingHours(),
-                newRestaurantDTO.restaurantOwner()
+                newRestaurantInput.name(),
+                newRestaurantInput.address(),
+                newRestaurantInput.kitchenType(),
+                newRestaurantInput.openingHours(),
+                newRestaurantInput.restaurantOwnerId()
         );
 
-        Restaurant restaurant = restaurantGateway.create(newRestaurant);
-        return restaurant;
+        return restaurantGateway.create(newRestaurant);
     }
 }

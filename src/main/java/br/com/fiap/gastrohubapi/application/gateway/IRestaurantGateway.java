@@ -10,7 +10,6 @@ public interface IRestaurantGateway {
     Restaurant findById(UUID uuid);
     Restaurant findByName(String name);
     Restaurant delete(UUID uuid);
-    Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, User restaurantOwner);
     Restaurant create(Restaurant restaurant);
-    Restaurant update(String name, String address, KitchenType kitchenType, String openingHours, User restaurantOwner);
+    Restaurant update(UUID uuid, String name, String address, KitchenType kitchenType, String openingHours, User restaurantOwner);
 }
