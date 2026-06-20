@@ -9,6 +9,8 @@ import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
 
+import java.util.List;
+
 public class CreateRestaurantUseCase {
     private final IRestaurantGateway restaurantGateway;
     private final IUserGateway userGateway;
@@ -23,30 +25,25 @@ public class CreateRestaurantUseCase {
     }
 
     public Restaurant run(NewRestaurantInput newRestaurantInput) {
-        final Restaurant existingRestaurant = restaurantGateway.findByName(newRestaurantInput.name());
-
-        if (existingRestaurant != null) {
-            throw new RestaurantAlreadyExistsException("Some restaurant already exists with this name: " + newRestaurantInput.name());
-        }
-
-        final User existingUser = userGateway.findById(newRestaurantInput.restaurantOwnerId());
-
-        if (existingUser == null) {
-            throw new UserNotFoundException("User not found");
-        }
+        final User existingUser = userGateway.findById(newRestaurantInput.restaurantOwnerId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (existingUser.isClient()) {
             throw new UserTypeNotAllowedForRestaurantOwnerException("The restaurantOwnerId cannot be a CLIENT BaseCategory User");
         }
 
-        final Restaurant newRestaurant = Restaurant.create(
-                newRestaurantInput.name(),
-                newRestaurantInput.address(),
-                newRestaurantInput.kitchenType(),
-                newRestaurantInput.openingHours(),
-                newRestaurantInput.restaurantOwnerId()
+        final List<Restaurant> restaurants = restaurantGateway.findByName(newRestaurantInput.name());
+
+        final boolean restaurantAlreadyExists = restaurants.stream().anyMatch(r ->
+                r.getRestaurantOwnerId().equals(newRestaurantInput.restaurantOwnerId())
+                && r.getAddress().equals(newRestaurantInput.address())
+                && r.getKitchenType().equals(newRestaurantInput.kitchenType())
         );
 
-        return restaurantGateway.create(newRestaurant);
+        if (restaurantAlreadyExists) {
+            throw new RestaurantAlreadyExistsException("Another restaurant already exists with the same name, owner, address and kitchentype");
+        }
+
+        return restaurantGateway.create(newRestaurantInput);
     }
 }

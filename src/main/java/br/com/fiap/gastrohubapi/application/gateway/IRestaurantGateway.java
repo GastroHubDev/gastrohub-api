@@ -1,15 +1,17 @@
 package br.com.fiap.gastrohubapi.application.gateway;
 
+import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
+import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.UpdateRestaurantInput;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
-import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.enums.KitchenType;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface IRestaurantGateway {
-    Restaurant findById(UUID uuid);
-    Restaurant findByName(String name);
-    Restaurant delete(UUID uuid);
-    Restaurant create(Restaurant restaurant);
-    Restaurant update(UUID uuid, String name, String address, KitchenType kitchenType, String openingHours, User restaurantOwner);
+    Optional<Restaurant> findById(UUID uuid);
+    List<Restaurant> findByName(String name);
+    void delete(UUID uuid);
+    Restaurant create(NewRestaurantInput restaurant);
+    Restaurant update(UUID uuid, UpdateRestaurantInput restaurant);
 }

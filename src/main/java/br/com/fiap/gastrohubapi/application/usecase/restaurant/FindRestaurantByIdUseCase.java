@@ -17,12 +17,8 @@ public class FindRestaurantByIdUseCase {
         return new FindRestaurantByIdUseCase(gateway);
     }
 
-    public Restaurant run(UUID uuid) throws RestaurantNotFoundByIdException {
-        Restaurant restaurant = gateway.findById(uuid);
-        if (restaurant == null) {
-            throw new RestaurantNotFoundByIdException("Restaurant id: " + uuid);
-        }
-
-        return restaurant;
+    public Restaurant run(UUID uuid) {
+        return gateway.findById(uuid)
+                .orElseThrow(() -> new RestaurantNotFoundByIdException("Restaurant id: " + uuid));
     }
 }
