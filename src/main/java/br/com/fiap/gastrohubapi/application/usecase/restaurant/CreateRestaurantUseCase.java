@@ -1,10 +1,10 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
-import br.com.fiap.gastrohubapi.application.gateway.IUserGateway;
+import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
-import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
+import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
@@ -12,15 +12,15 @@ import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaura
 import java.util.List;
 
 public class CreateRestaurantUseCase {
-    private final IRestaurantGateway restaurantGateway;
-    private final IUserGateway userGateway;
+    private final RestaurantGateway restaurantGateway;
+    private final UserGateway userGateway;
 
-    private CreateRestaurantUseCase(IRestaurantGateway restaurantGateway, IUserGateway userGateway) {
+    private CreateRestaurantUseCase(RestaurantGateway restaurantGateway, UserGateway userGateway) {
         this.restaurantGateway = restaurantGateway;
         this.userGateway = userGateway;
     }
 
-    public static CreateRestaurantUseCase create(IRestaurantGateway restaurantGateway, IUserGateway userGateway) {
+    public static CreateRestaurantUseCase create(RestaurantGateway restaurantGateway, UserGateway userGateway) {
         return new CreateRestaurantUseCase(restaurantGateway, userGateway);
     }
 
@@ -44,6 +44,14 @@ public class CreateRestaurantUseCase {
             throw new RestaurantAlreadyExistsException("Another restaurant already exists with the same name, owner, address and kitchentype");
         }
 
-        return restaurantGateway.create(newRestaurantInput);
+        Restaurant restaurant = Restaurant.create(
+                newRestaurantInput.name(),
+                newRestaurantInput.address(),
+                newRestaurantInput.kitchenType(),
+                newRestaurantInput.openingHours(),
+                newRestaurantInput.restaurantOwnerId()
+        );
+
+        return restaurantGateway.save(restaurant);
     }
 }

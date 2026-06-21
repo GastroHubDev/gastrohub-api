@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface IRestaurantGateway {
+public interface RestaurantGateway {
     Optional<Restaurant> findById(UUID uuid);
     List<Restaurant> findByName(String name);
     void delete(UUID uuid);
-    Restaurant create(NewRestaurantInput restaurant);
-    Restaurant update(UUID uuid, UpdateRestaurantInput restaurant);
+    Restaurant save(Restaurant restaurant);
+    Restaurant update(Restaurant restaurant);
 }

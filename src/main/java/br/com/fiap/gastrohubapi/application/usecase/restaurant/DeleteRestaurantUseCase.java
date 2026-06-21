@@ -1,18 +1,18 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
-import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
+import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
 
 import java.util.UUID;
 
 public class DeleteRestaurantUseCase {
-    private final IRestaurantGateway gateway;
+    private final RestaurantGateway gateway;
 
-    private DeleteRestaurantUseCase(IRestaurantGateway restaurantGateway) {
+    private DeleteRestaurantUseCase(RestaurantGateway restaurantGateway) {
         this.gateway = restaurantGateway;
     }
 
-    public static DeleteRestaurantUseCase create(IRestaurantGateway gateway) {
+    public static DeleteRestaurantUseCase create(RestaurantGateway gateway) {
         return new DeleteRestaurantUseCase(gateway);
     }
 

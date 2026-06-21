@@ -1,19 +1,19 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
-import br.com.fiap.gastrohubapi.application.gateway.IRestaurantGateway;
+import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 
 import java.util.List;
 
 public class FindRestaurantByNameUseCase {
 
-    private final IRestaurantGateway gateway;
+    private final RestaurantGateway gateway;
 
-    private FindRestaurantByNameUseCase(IRestaurantGateway gateway) {
+    private FindRestaurantByNameUseCase(RestaurantGateway gateway) {
         this.gateway = gateway;
     }
 
-    public static FindRestaurantByNameUseCase create(IRestaurantGateway gateway) {
+    public static FindRestaurantByNameUseCase create(RestaurantGateway gateway) {
         return new FindRestaurantByNameUseCase(gateway);
     }
 
