@@ -4,11 +4,13 @@ import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.RestaurantJpaEntity;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.RestaurantJpaRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Component
 public class RestaurantGatewayImpl implements RestaurantGateway {
 
     private final RestaurantJpaRepository repository;
@@ -42,6 +44,13 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
 
     @Override
     public Restaurant update(Restaurant restaurant) {
-        return null;
+        final RestaurantJpaEntity entity = RestaurantJpaEntity.fromDomain(restaurant);
+        return repository.save(entity).toDomain();
+    }
+
+    @Override
+    public List<Restaurant> findAll() {
+        return repository.findAll()
+                .stream().map(RestaurantJpaEntity::toDomain).toList();
     }
 }

@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface RestaurantGateway {
     Optional<Restaurant> findById(UUID uuid);
     List<Restaurant> findByName(String name);
+    List<Restaurant> findAll();
     void delete(UUID uuid);
     Restaurant save(Restaurant restaurant);
     Restaurant update(Restaurant restaurant);
