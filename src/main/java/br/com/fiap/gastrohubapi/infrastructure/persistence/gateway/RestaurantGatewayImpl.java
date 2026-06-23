@@ -13,8 +13,12 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
 
     private final RestaurantJpaRepository repository;
 
-    public RestaurantGatewayImpl(RestaurantJpaRepository repository) {
+    private RestaurantGatewayImpl(RestaurantJpaRepository repository) {
         this.repository = repository;
+    }
+
+    public static RestaurantGatewayImpl create(RestaurantJpaRepository repository) {
+        return new RestaurantGatewayImpl(repository);
     }
 
     @Override
@@ -42,6 +46,7 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
 
     @Override
     public Restaurant update(Restaurant restaurant) {
-        return null;
+        RestaurantJpaEntity entity = RestaurantJpaEntity.fromDomain(restaurant);
+        return repository.save(entity).toDomain();
     }
 }
