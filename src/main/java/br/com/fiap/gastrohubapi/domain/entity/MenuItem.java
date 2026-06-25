@@ -1,23 +1,24 @@
 package br.com.fiap.gastrohubapi.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class MenuItem {
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private BigDecimal price;
     private boolean onlyInRestaurant;
     private String photoPath;
-    private Long restaurantId;
+    private UUID restaurantId;
 
-    public MenuItem(Long id,
+    public MenuItem(UUID id,
                     String name,
                     String description,
                     BigDecimal price,
                     boolean onlyInRestaurant,
                     String photoPath,
-                    Long restaurantId)
+                    UUID restaurantId)
     {
         this.id = id;
         this.name = name;
@@ -28,11 +29,11 @@ public class MenuItem {
         this.restaurantId = restaurantId;
     }
 
-    public long getId() {return id;}
+    public UUID getId() {return id;}
     public String getName() {return name;}
     public String getDescription() {return description;}
     public BigDecimal getPrice() {return price;}
     public boolean isOnlyInRestaurant() {return onlyInRestaurant;}
     public String getPhotoPath() {return photoPath;}
-    public Long getRestaurantId() {return restaurantId;}
+    public UUID getRestaurantId() {return restaurantId;}
 }

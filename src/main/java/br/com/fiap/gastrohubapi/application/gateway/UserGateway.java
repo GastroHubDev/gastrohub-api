@@ -4,7 +4,7 @@ import br.com.fiap.gastrohubapi.domain.entity.User;
 
 import java.util.UUID;
 
-public interface IUserGateway {
+public interface UserGateway {
     User findById(UUID uuid);
 
     User findByName(String name);

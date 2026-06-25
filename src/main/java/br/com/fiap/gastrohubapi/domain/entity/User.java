@@ -122,4 +122,8 @@ public class User {
         }
     }
 
+    public boolean isClient() {
+        return this.getUserType().getBaseCategory().equals(BaseCategory.CLIENT);
+    }
+
 }
