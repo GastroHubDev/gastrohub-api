@@ -42,6 +42,14 @@ public class Restaurant {
         return restaurant;
     }
 
+    public void update(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
+        setName(name);
+        setAddress(address);
+        setKitchenType(kitchenType);
+        setOpeningHours(openingHours);
+        setRestaurantOwnerId(restaurantOwnerId);
+    }
+
     private static void validateRestaurantOwnerId(UUID restaurantOwnerId){
         if(restaurantOwnerId == null) {
             throw new IllegalArgumentException("RestaurantOwnerId cannot be null");
