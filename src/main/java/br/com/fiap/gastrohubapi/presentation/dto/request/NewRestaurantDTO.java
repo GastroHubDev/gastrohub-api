@@ -5,5 +5,5 @@ import br.com.fiap.gastrohubapi.domain.enums.KitchenType;
 
 import java.util.UUID;
 
-public record NewRestaurantDTO(UUID id, String name, String address, KitchenType kitchenType, String openingHours, User restaurantOwner) {
+public record NewRestaurantDTO(UUID id, String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwner) {
 }

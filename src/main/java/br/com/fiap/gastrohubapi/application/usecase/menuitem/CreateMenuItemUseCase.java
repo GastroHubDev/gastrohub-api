@@ -1,4 +1,4 @@
-package br.com.fiap.gastrohubapi.application.usecase;
+package br.com.fiap.gastrohubapi.application.usecase.menuitem;
 
 import br.com.fiap.gastrohubapi.application.gateway.MenuItemGateway;
 import br.com.fiap.gastrohubapi.domain.entity.MenuItem;
