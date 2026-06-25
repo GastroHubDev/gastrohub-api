@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface MenuItemRepository extends JpaRepository<MenuItemJpaEntity, Long> {
+public interface MenuItemRepository extends JpaRepository<MenuItemJpaEntity, UUID> {
     List<MenuItemJpaEntity> findAllByRestaurantId(UUID restaurantId);
 }

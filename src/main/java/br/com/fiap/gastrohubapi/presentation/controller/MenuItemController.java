@@ -51,7 +51,7 @@ public class MenuItemController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Find a menu item by id")
-    public ResponseEntity<MenuItemResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<MenuItemResponse> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(MenuItemMapper.toResponse(findMenuItemByIdUseCase.execute(id)));
     }
 

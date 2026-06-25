@@ -24,7 +24,7 @@ public class MenuItemGatewayImpl implements MenuItemGateway {
     }
 
     @Override
-    public Optional<MenuItem> findById(Long id) {
+    public Optional<MenuItem> findById(UUID id) {
         return repository.findById(id).map(this::toDomainEntity);
     }
 
@@ -46,12 +46,12 @@ public class MenuItemGatewayImpl implements MenuItemGateway {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(UUID id) {
         return repository.existsById(id);
     }
 
