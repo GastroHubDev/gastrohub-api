@@ -1,7 +1,7 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
-import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Entity
@@ -21,13 +21,15 @@ public class UserJpaEntity {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserType userType;
+    // ToDo validate here
+    @ManyToOne
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserTypeJpaEntity userType;
 
-    public UserJpaEntity() {}
+    public UserJpaEntity() {
+    }
 
-    public UserJpaEntity(UUID id, String name, String email, String password, UserType userType) {
+    public UserJpaEntity(UUID id, String name, String email, String password, UserTypeJpaEntity userType) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -35,10 +37,23 @@ public class UserJpaEntity {
         this.userType = userType;
     }
 
+    public UUID getId() {
+        return id;
+    }
 
-    public UUID getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public UserType getUserType() { return userType; }
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UserTypeJpaEntity getUserType() {
+        return userType;
+    }
 }

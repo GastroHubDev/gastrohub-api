@@ -1,19 +1,19 @@
 package br.com.fiap.gastrohubapi.application.usecase.user;
 
-import br.com.fiap.gastrohubapi.application.gateway.IUserGateway;
+import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 
 public class FindUserByNameUseCase {
 
-    private final IUserGateway userGateway;
+    private final UserGateway userGateway;
 
-    public FindUserByNameUseCase(IUserGateway userGateway) {
+    public FindUserByNameUseCase(UserGateway userGateway) {
         this.userGateway = userGateway;
 
     }
 
-    public static FindUserByNameUseCase create(IUserGateway userGateway) {
+    public static FindUserByNameUseCase create(UserGateway userGateway) {
         return new FindUserByNameUseCase(userGateway);
     }
 
