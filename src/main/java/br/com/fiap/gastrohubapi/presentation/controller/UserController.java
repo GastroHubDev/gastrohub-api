@@ -5,7 +5,7 @@ import br.com.fiap.gastrohubapi.application.usecase.user.CreateUserUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.user.FindUserByIdUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.user.FindUserByNameUseCase;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.presentation.dto.request.NewUserDTO;
+import br.com.fiap.gastrohubapi.application.usecase.user.input.NewUserDTO;
 import br.com.fiap.gastrohubapi.presentation.dto.response.UserDTO;
 import br.com.fiap.gastrohubapi.presentation.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
