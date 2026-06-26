@@ -4,7 +4,7 @@ package br.com.fiap.gastrohubapi.application.usecase.user;
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
-import br.com.fiap.gastrohubapi.presentation.dto.request.NewUserDTO;
+import br.com.fiap.gastrohubapi.application.usecase.user.input.NewUserDTO;
 
 import java.util.Optional;
 
