@@ -1,14 +1,10 @@
 package br.com.fiap.gastrohubapi.presentation.controller;
 
-import br.com.fiap.gastrohubapi.application.gateway.IUserDataSource;
-import br.com.fiap.gastrohubapi.application.gateway.IUserGateway;
+import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.application.usecase.user.CreateUserUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.user.FindUserByIdUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.user.FindUserByNameUseCase;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.gateway.UserGatewayImpl;
-import br.com.fiap.gastrohubapi.application.gateway.IUserGateway; // <-- IMPORT CORRETO
 import br.com.fiap.gastrohubapi.presentation.dto.request.NewUserDTO;
 import br.com.fiap.gastrohubapi.presentation.dto.response.UserDTO;
 import br.com.fiap.gastrohubapi.presentation.mapper.UserMapper;
@@ -26,9 +22,8 @@ public class UserController {
     private final FindUserByIdUseCase findUserByIdUseCase;
     private final FindUserByNameUseCase findUserByNameUseCase;
     private final UserMapper userMapper;
-    // 1. Declare o Mapper
 
-    public UserController(IUserGateway userGateway, UserMapper userMapper) {
+    public UserController(UserGateway userGateway, UserMapper userMapper) {
         this.createUserUseCase = CreateUserUseCase.create(userGateway);
         this.findUserByIdUseCase = FindUserByIdUseCase.create(userGateway);
         this.findUserByNameUseCase = FindUserByNameUseCase.create(userGateway);

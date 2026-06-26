@@ -1,5 +1,6 @@
 package br.com.fiap.gastrohubapi.presentation.exceptionhandler;
 
+import br.com.fiap.gastrohubapi.domain.exception.MenuItemNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
@@ -40,6 +41,12 @@ public class GlobalExceptionHandler {
                 .orElse("Invalid request");
 
         return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleMenuItemNotFound(MenuItemNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", ex.getMessage()));
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {

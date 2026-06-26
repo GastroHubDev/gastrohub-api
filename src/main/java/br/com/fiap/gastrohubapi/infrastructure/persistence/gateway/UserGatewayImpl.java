@@ -1,9 +1,10 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.gateway;
 
-import br.com.fiap.gastrohubapi.application.gateway.IUserGateway;
+import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserJpaEntity;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserTypeJpaEntity;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class UserGatewayImpl implements IUserGateway {
+public class UserGatewayImpl implements UserGateway {
 
     private final UserRepository userRepository;
 
@@ -20,11 +21,9 @@ public class UserGatewayImpl implements IUserGateway {
     }
 
     @Override
-    public User findById(UUID uuid) {
-        UserJpaEntity entity = this.userRepository.findById(uuid)
-                .orElseThrow(() -> new UserNotFoundException("User ID: " + uuid + " not found"));
-
-        return mapToDomain(entity);
+    public Optional<User> findById(UUID uuid) {
+        return this.userRepository.findById(uuid)
+                .map(this::mapToDomain);
     }
 
     @Override
@@ -37,12 +36,7 @@ public class UserGatewayImpl implements IUserGateway {
 
     @Override
     public User add(User newUser) {
-        UserJpaEntity entityToSave = new UserJpaEntity(
-                newUser.getId(),
-                newUser.getName(),
-                newUser.getEmail(),
-                newUser.getPassword(),
-                newUser.getUserType()
+        UserJpaEntity entityToSave = new UserJpaEntity(newUser.getId(), newUser.getName(), newUser.getEmail(), newUser.getPassword(), UserTypeJpaEntity.fromDomain(newUser.getUserType())
         );
 
         UserJpaEntity savedEntity = this.userRepository.save(entityToSave);
@@ -56,7 +50,7 @@ public class UserGatewayImpl implements IUserGateway {
                 entity.getName(),
                 entity.getEmail(),
                 entity.getPassword(),
-                entity.getUserType()
+                entity.getUserType().toDomain()
         );
     }
 }
