@@ -17,36 +17,36 @@ public class Restaurant {
 
     private Restaurant() {}
 
-    public static Restaurant create(UUID id, String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
+    public static Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
 
         Restaurant restaurant = new Restaurant();
-        restaurant.setId(id);
-        restaurant.setName(name);
-        restaurant.setAddress(address);
+        restaurant.setName(name.trim());
+        restaurant.setAddress(address.trim());
         restaurant.setKitchenType(kitchenType);
-        restaurant.setOpeningHours(openingHours);
+        restaurant.setOpeningHours(openingHours.trim());
         restaurant.setRestaurantOwnerId(restaurantOwnerId);
 
         return restaurant;
     }
 
-    public static Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
+    public static Restaurant restore(UUID id, String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
 
         Restaurant restaurant = new Restaurant();
-        restaurant.setName(name);
-        restaurant.setAddress(address);
+        restaurant.setId(id);
+        restaurant.setName(name.trim());
+        restaurant.setAddress(address.trim());
         restaurant.setKitchenType(kitchenType);
-        restaurant.setOpeningHours(openingHours);
+        restaurant.setOpeningHours(openingHours.trim());
         restaurant.setRestaurantOwnerId(restaurantOwnerId);
 
         return restaurant;
     }
 
     public void update(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
-        setName(name);
-        setAddress(address);
+        setName(name.trim());
+        setAddress(address.trim());
         setKitchenType(kitchenType);
-        setOpeningHours(openingHours);
+        setOpeningHours(openingHours.trim());
         setRestaurantOwnerId(restaurantOwnerId);
     }
 
@@ -70,7 +70,7 @@ public class Restaurant {
 
     private static void validateAddress(String address){
         if(address == null || address.trim().isEmpty()) {
-            throw new IllegalArgumentException("address cannot be null or empty");
+            throw new IllegalArgumentException("Address cannot be null or empty");
         }
     }
 

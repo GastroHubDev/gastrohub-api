@@ -1,7 +1,5 @@
 package br.com.fiap.gastrohubapi.application.gateway;
 
-import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
-import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.UpdateRestaurantInput;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 
 import java.util.List;
