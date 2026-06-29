@@ -15,11 +15,16 @@ public class User {
     public static User create(String name, String email, String password, UserType userType)  {
 
 
-        User user = new User();
         validateName(name);
         validatePassword(password);
         validateEmail(email);
         validateUserType(userType);
+
+        User user = new User();
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        user.userType = userType;
 
         return user;
     }
