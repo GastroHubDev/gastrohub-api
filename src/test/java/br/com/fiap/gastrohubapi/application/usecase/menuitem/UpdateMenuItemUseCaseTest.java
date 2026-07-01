@@ -35,9 +35,9 @@ class UpdateMenuItemUseCaseTest {
     void shouldUpdateAndReturnUpdatedItem() {
         UUID id = UUID.randomUUID();
         UUID restaurantId = UUID.randomUUID();
-        MenuItem updatedData = new MenuItem(null, "Burger XL", "Bigger burger",
+        MenuItem updatedData = MenuItem.create("Burger XL", "Bigger burger",
                 new BigDecimal("32.00"), true, "/photos/burger-xl.jpg", restaurantId);
-        MenuItem expected = new MenuItem(id, "Burger XL", "Bigger burger",
+        MenuItem expected = MenuItem.restore(id, "Burger XL", "Bigger burger",
                 new BigDecimal("32.00"), true, "/photos/burger-xl.jpg", restaurantId);
 
         when(gateway.existsById(id)).thenReturn(true);
@@ -54,9 +54,9 @@ class UpdateMenuItemUseCaseTest {
     void shouldPassCorrectIdToUpdate() {
         UUID id = UUID.randomUUID();
         UUID restaurantId = UUID.randomUUID();
-        MenuItem updatedData = new MenuItem(null, "Burger XL", "Bigger burger",
+        MenuItem updatedData = MenuItem.create("Burger XL", "Bigger burger",
                 new BigDecimal("32.00"), true, null, restaurantId);
-        MenuItem expected = new MenuItem(id, "Burger XL", "Bigger burger",
+        MenuItem expected = MenuItem.restore(id, "Burger XL", "Bigger burger",
                 new BigDecimal("32.00"), true, null, restaurantId);
 
         when(gateway.existsById(id)).thenReturn(true);
@@ -70,7 +70,7 @@ class UpdateMenuItemUseCaseTest {
     @Test
     void shouldThrowWhenItemNotFound() {
         UUID id = UUID.randomUUID();
-        MenuItem updatedData = new MenuItem(null, "X", "X",
+        MenuItem updatedData = MenuItem.create("X", "X description",
                 new BigDecimal("1.00"), false, null, UUID.randomUUID());
 
         when(gateway.existsById(id)).thenReturn(false);

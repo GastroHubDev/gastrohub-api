@@ -33,7 +33,7 @@ class FindMenuItemByIdUseCaseTest {
     @Test
     void shouldReturnItemWhenFound() {
         UUID id = UUID.randomUUID();
-        MenuItem item = new MenuItem(id, "Pizza", "Margherita",
+        MenuItem item = MenuItem.restore(id, "Pizza", "Margherita",
                 new BigDecimal("45.00"), false, null, UUID.randomUUID());
 
         when(gateway.findById(id)).thenReturn(Optional.of(item));
