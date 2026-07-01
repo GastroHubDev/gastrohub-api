@@ -1,15 +1,16 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.domain.Persistable;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_users")
-public class UserJpaEntity {
+public class UserJpaEntity implements Persistable<UUID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // A anotação @GeneratedValue foi removida para que o Domínio seja o dono do UUID
     private UUID id;
 
     @Column(nullable = false)
@@ -21,10 +22,14 @@ public class UserJpaEntity {
     @Column(nullable = false)
     private String password;
 
-    // ToDo validate here
-    @ManyToOne
+    // Ajuste: FetchType.LAZY evita consultas pesadas desnecessárias (N+1 Query Problem)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserTypeJpaEntity userType;
+
+    // Flag transitória para avisar o JPA quando é um INSERT ou um UPDATE
+    @Transient
+    private boolean isNewRecord = true;
 
     public UserJpaEntity() {
     }
@@ -37,9 +42,22 @@ public class UserJpaEntity {
         this.userType = userType;
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
+
+    @Override
+    public boolean isNew() {
+        return isNewRecord;
+    }
+
+    @PostLoad
+    @PostPersist
+    public void markNotNew() {
+        this.isNewRecord = false;
+    }
+    // --------------------------------------------------------------------------
 
     public String getName() {
         return name;

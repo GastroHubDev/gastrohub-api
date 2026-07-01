@@ -12,14 +12,18 @@ public class User {
 
     public User(){}
 
-    public static User create(String name, String email, String password, UserType userType)  {
-
+    public static User create(String name, String email, String password, UserType userType) {
+        validateName(name);
+        validateEmail(email);
+        validatePassword(password);
+        validateUserType(userType);
 
         User user = new User();
-        validateName(name);
-        validatePassword(password);
-        validateEmail(email);
-        validateUserType(userType);
+        user.id = UUID.randomUUID();
+        user.name = name;
+        user.email = email;
+        user.password = password;
+        user.userType = userType;
 
         return user;
     }
@@ -27,6 +31,7 @@ public class User {
     public static User restore(UUID id, String name, String email, String password, UserType userType) {
         validateName(name);
         validateEmail(email);
+        validatePassword(password);
         validateUserType(userType);
 
         User user = new User();
@@ -37,6 +42,18 @@ public class User {
         user.userType = userType;
 
         return user;
+    }
+
+    public void update(String name, String email, String password, UserType userType) {
+        validateName(name);
+        validateEmail(email);
+        validatePassword(password);
+        validateUserType(userType);
+
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
     }
 
 //    public User(UUID id, String name, String email, String password,UserType userType){
@@ -77,10 +94,10 @@ public class User {
         validateUserType(userType);
         this.userType = userType;
     }
-//
-//    public void setId(UUID id) {
-//        this.id = id;
-//    }
+
+    private void setId(UUID id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         validateName(name);
