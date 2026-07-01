@@ -31,9 +31,9 @@ class FindAllMenuItemsUseCaseTest {
     @Test
     void shouldReturnAllItems() {
         List<MenuItem> items = List.of(
-                new MenuItem(UUID.randomUUID(), "Burger", "desc",
+                MenuItem.restore(UUID.randomUUID(), "Burger", "desc",
                         new BigDecimal("25.00"), true, null, UUID.randomUUID()),
-                new MenuItem(UUID.randomUUID(), "Pizza", "desc",
+                MenuItem.restore(UUID.randomUUID(), "Pizza", "desc",
                         new BigDecimal("40.00"), false, null, UUID.randomUUID())
         );
 

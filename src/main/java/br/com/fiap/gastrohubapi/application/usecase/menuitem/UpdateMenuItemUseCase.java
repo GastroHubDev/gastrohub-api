@@ -18,7 +18,7 @@ public class UpdateMenuItemUseCase {
         if (!menuItemGateway.existsById(id)) {
             throw new MenuItemNotFoundException(id);
         }
-        MenuItem menuItem = new MenuItem(
+        MenuItem menuItem = MenuItem.restore(
                 id,
                 updatedData.getName(),
                 updatedData.getDescription(),

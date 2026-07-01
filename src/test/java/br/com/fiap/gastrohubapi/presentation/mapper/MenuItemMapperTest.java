@@ -53,7 +53,7 @@ class MenuItemMapperTest {
     void toResponse_shouldMapAllFields() {
         UUID id = UUID.randomUUID();
         UUID restaurantId = UUID.randomUUID();
-        MenuItem item = new MenuItem(id, "Sushi", "Fresh salmon",
+        MenuItem item = MenuItem.restore(id, "Sushi", "Fresh salmon",
                 new BigDecimal("38.00"), true, "/photos/sushi.jpg", restaurantId);
 
         MenuItemResponse result = MenuItemMapper.toResponse(item);
@@ -70,7 +70,7 @@ class MenuItemMapperTest {
     @Test
     void toResponse_withNullPhotoPath_shouldMapNullPhotoPath() {
         UUID id = UUID.randomUUID();
-        MenuItem item = new MenuItem(id, "Burger", "desc",
+        MenuItem item = MenuItem.restore(id, "Burger", "desc",
                 new BigDecimal("25.00"), false, null, UUID.randomUUID());
 
         MenuItemResponse result = MenuItemMapper.toResponse(item);
