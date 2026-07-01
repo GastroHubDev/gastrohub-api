@@ -8,6 +8,7 @@ import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserTypeJpaEnt
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,15 +28,29 @@ public class UserGatewayImpl implements UserGateway {
     }
 
     @Override
-    public User findByName(String name) {
-        UserJpaEntity entity = this.userRepository.findByName(name)
-                .orElseThrow(() -> new UserNotFoundException("User " + name + " not found"));
+    public List<User> findByName(String name) {
+        return this.userRepository.findByName(name)
+                .stream()
+                .map(this::mapToDomain)
+                .toList();
+    }
 
-        return mapToDomain(entity);
+//    @Override
+//    public User findByName(String name) {
+//        UserJpaEntity entity = this.userRepository.findByName(name)
+//                .orElseThrow(() -> new UserNotFoundException("User " + name + " not found"));
+//
+//        return mapToDomain(entity);
+//    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+                .map(this::mapToDomain);
     }
 
     @Override
-    public User add(User newUser) {
+    public User save(User newUser) {
         UserJpaEntity entityToSave = new UserJpaEntity(newUser.getId(), newUser.getName(), newUser.getEmail(), newUser.getPassword(), UserTypeJpaEntity.fromDomain(newUser.getUserType())
         );
 
@@ -53,4 +68,37 @@ public class UserGatewayImpl implements UserGateway {
                 entity.getUserType().toDomain()
         );
     }
+
+    @Override
+    public User update(User updatedUser) {
+
+        // Passa o ID direto no construtor novo! Fim do problema.
+        UserTypeJpaEntity typeJpa = new UserTypeJpaEntity(updatedUser.getUserType().getId());
+
+        UserJpaEntity entityToUpdate = new UserJpaEntity(
+                updatedUser.getId(),
+                updatedUser.getName(),
+                updatedUser.getEmail(),
+                updatedUser.getPassword(),
+                typeJpa
+        );
+
+        entityToUpdate.markNotNew();
+
+        return mapToDomain(this.userRepository.save(entityToUpdate));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return this.userRepository.findAll()
+                .stream()
+                .map(this::mapToDomain)
+                .toList();
+    }
+
+    @Override
+    public void delete(UUID id) {
+        this.userRepository.deleteById(id);
+    }
+
 }
