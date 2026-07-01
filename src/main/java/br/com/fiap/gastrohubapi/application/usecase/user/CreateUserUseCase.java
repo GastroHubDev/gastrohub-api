@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public class CreateUserUseCase {
 
-    UserGateway userGateway;
+    private final UserGateway userGateway;
 
-    private CreateUserUseCase(UserGateway userGateway) {
+    public CreateUserUseCase(UserGateway userGateway) {
         this.userGateway = userGateway;
     }
 
@@ -22,10 +22,8 @@ public class CreateUserUseCase {
     }
 
     public User run(NewUserDTO newUserDTO) {
-        final Optional<User> existingUser = this.userGateway.findById(newUserDTO.id());
-
-        if (existingUser.isPresent()) {
-            throw new UserAlreadyExistsException("User " + newUserDTO.name() + " already exists.");
+        if(this.userGateway.findByEmail(newUserDTO.email()).isPresent()) {
+            throw new UserAlreadyExistsException("User with email " + newUserDTO.email() + " already exists.");
         }
 
         final User newUser = User.create(
@@ -35,6 +33,6 @@ public class CreateUserUseCase {
                 newUserDTO.userType()
         );
 
-        return this.userGateway.add(newUser);
+        return this.userGateway.save(newUser);
     }
 }

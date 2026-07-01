@@ -32,7 +32,7 @@ class FindMenuItemsByRestaurantUseCaseTest {
     void shouldReturnItemsForGivenRestaurant() {
         UUID restaurantId = UUID.randomUUID();
         List<MenuItem> items = List.of(
-                new MenuItem(UUID.randomUUID(), "Sushi", "Fresh",
+                MenuItem.restore(UUID.randomUUID(), "Sushi", "Fresh",
                         new BigDecimal("38.00"), true, null, restaurantId)
         );
 

@@ -10,13 +10,13 @@ public class MenuItemMapper {
     private MenuItemMapper() {}
 
     public static MenuItem toDomain(CreateMenuItemRequest request) {
-        return new MenuItem(null, request.name(), request.description(),
+        return MenuItem.create(request.name(), request.description(),
                 request.price(), request.onlyInRestaurant(),
                 request.photoPath(), request.restaurantId());
     }
 
     public static MenuItem toDomain(UpdateMenuItemRequest request) {
-        return new MenuItem(null, request.name(), request.description(),
+        return MenuItem.create(request.name(), request.description(),
                 request.price(), request.onlyInRestaurant(),
                 request.photoPath(), request.restaurantId());
     }

@@ -68,7 +68,7 @@ public class MenuItemGatewayImpl implements MenuItemGateway {
     }
 
     private MenuItem toDomainEntity(MenuItemJpaEntity jpaEntity) {
-        return new MenuItem(
+        return MenuItem.restore(
                 jpaEntity.getId(),
                 jpaEntity.getName(),
                 jpaEntity.getDescription(),

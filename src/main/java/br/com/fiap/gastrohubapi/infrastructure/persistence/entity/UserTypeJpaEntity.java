@@ -22,6 +22,11 @@ public class UserTypeJpaEntity {
     protected UserTypeJpaEntity() {
     }
 
+    public UserTypeJpaEntity(Long id) {
+        this.id = id;
+    }
+
+
     public UserTypeJpaEntity(Long id, String name, BaseCategory baseCategory) {
         this.id = id;
         this.name = name;

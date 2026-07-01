@@ -1,6 +1,7 @@
 package br.com.fiap.gastrohubapi.infrastructure.config;
 
 import br.com.fiap.gastrohubapi.application.gateway.MenuItemGateway;
+import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.application.usecase.menuitem.*;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.gateway.MenuItemGatewayImpl;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemRepository;
@@ -16,8 +17,8 @@ public class MenuItemConfig {
     }
 
     @Bean
-    public CreateMenuItemUseCase createMenuItemUseCase(MenuItemGateway gateway) {
-        return new CreateMenuItemUseCase(gateway);
+    public CreateMenuItemUseCase createMenuItemUseCase(MenuItemGateway gateway, RestaurantGateway restaurantGateway) {
+        return new CreateMenuItemUseCase(gateway, restaurantGateway);
     }
 
     @Bean

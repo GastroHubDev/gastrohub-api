@@ -2,7 +2,8 @@ package br.com.fiap.gastrohubapi.application.usecase.user;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
+
+import java.util.List;
 
 public class FindUserByNameUseCase {
 
@@ -17,13 +18,8 @@ public class FindUserByNameUseCase {
         return new FindUserByNameUseCase(userGateway);
     }
 
-    public User run(String name){
-      User user = this.userGateway.findByName(name) ;
-      if(user == null) {
-          throw new UserNotFoundException("User name: " + name);
-      }
+    public List<User> run(String name){
 
-      return user;
-
+        return this.userGateway.findByName(name);
     }
 }
