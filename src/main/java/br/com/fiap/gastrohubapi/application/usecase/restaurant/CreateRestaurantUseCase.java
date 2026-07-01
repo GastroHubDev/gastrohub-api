@@ -3,21 +3,21 @@ package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
-
-import java.util.List;
+import br.com.fiap.gastrohubapi.application.usecase.restaurant.validator.RestaurantDuplicationValidator;
 
 public class CreateRestaurantUseCase {
     private final RestaurantGateway restaurantGateway;
     private final UserGateway userGateway;
+    private final RestaurantDuplicationValidator duplicationValidator;
 
     private CreateRestaurantUseCase(RestaurantGateway restaurantGateway, UserGateway userGateway) {
         this.restaurantGateway = restaurantGateway;
         this.userGateway = userGateway;
+        this.duplicationValidator = RestaurantDuplicationValidator.create(restaurantGateway);
     }
 
     public static CreateRestaurantUseCase create(RestaurantGateway restaurantGateway, UserGateway userGateway) {
@@ -32,17 +32,13 @@ public class CreateRestaurantUseCase {
             throw new UserTypeNotAllowedForRestaurantOwnerException("The restaurantOwnerId cannot be a CLIENT BaseCategory User");
         }
 
-        final List<Restaurant> restaurants = restaurantGateway.findByName(newRestaurantInput.name());
-
-        final boolean restaurantAlreadyExists = restaurants.stream().anyMatch(r ->
-                r.getRestaurantOwnerId().equals(newRestaurantInput.restaurantOwnerId())
-                && r.getAddress().equals(newRestaurantInput.address())
-                && r.getKitchenType().equals(newRestaurantInput.kitchenType())
+        duplicationValidator.assertNoDuplicate(
+                newRestaurantInput.name(),
+                newRestaurantInput.restaurantOwnerId(),
+                newRestaurantInput.address(),
+                newRestaurantInput.kitchenType(),
+                null
         );
-
-        if (restaurantAlreadyExists) {
-            throw new RestaurantAlreadyExistsException("Another restaurant already exists with the same name, owner, address and kitchentype");
-        }
 
         Restaurant restaurant = Restaurant.create(
                 newRestaurantInput.name(),

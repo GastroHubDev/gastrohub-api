@@ -17,10 +17,9 @@ public class Restaurant {
 
     private Restaurant() {}
 
-    public static Restaurant create(UUID id, String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
+    public static Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
 
         Restaurant restaurant = new Restaurant();
-        restaurant.setId(id);
         restaurant.setName(name);
         restaurant.setAddress(address);
         restaurant.setKitchenType(kitchenType);
@@ -30,9 +29,10 @@ public class Restaurant {
         return restaurant;
     }
 
-    public static Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
+    public static Restaurant restore(UUID id, String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
 
         Restaurant restaurant = new Restaurant();
+        restaurant.setId(id);
         restaurant.setName(name);
         restaurant.setAddress(address);
         restaurant.setKitchenType(kitchenType);
@@ -70,7 +70,7 @@ public class Restaurant {
 
     private static void validateAddress(String address){
         if(address == null || address.trim().isEmpty()) {
-            throw new IllegalArgumentException("address cannot be null or empty");
+            throw new IllegalArgumentException("Address cannot be null or empty");
         }
     }
 
@@ -93,12 +93,12 @@ public class Restaurant {
 
     private void setName(String name) {
         validateName(name);
-        this.name = name;
+        this.name = name.trim();
     }
 
     private void setAddress(String address) {
         validateAddress(address);
-        this.address = address;
+        this.address = address.trim();
     }
 
     private void setKitchenType(KitchenType kitchenType) {
@@ -108,7 +108,7 @@ public class Restaurant {
 
     private void setOpeningHours(String openingHours) {
         validateOpeningHours(openingHours);
-        this.openingHours = openingHours;
+        this.openingHours = openingHours.trim();
     }
 
     private void setRestaurantOwnerId(UUID restaurantOwnerId) {

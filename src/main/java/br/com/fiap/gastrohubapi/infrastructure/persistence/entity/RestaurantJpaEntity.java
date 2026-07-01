@@ -57,7 +57,7 @@ public class RestaurantJpaEntity {
     }
 
     public Restaurant toDomain() {
-        return Restaurant.create(
+        return Restaurant.restore(
                 id,
                 name,
                 address,
