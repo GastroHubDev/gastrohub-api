@@ -20,10 +20,10 @@ public class Restaurant {
     public static Restaurant create(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
 
         Restaurant restaurant = new Restaurant();
-        restaurant.setName(name.trim());
-        restaurant.setAddress(address.trim());
+        restaurant.setName(name);
+        restaurant.setAddress(address);
         restaurant.setKitchenType(kitchenType);
-        restaurant.setOpeningHours(openingHours.trim());
+        restaurant.setOpeningHours(openingHours);
         restaurant.setRestaurantOwnerId(restaurantOwnerId);
 
         return restaurant;
@@ -33,20 +33,20 @@ public class Restaurant {
 
         Restaurant restaurant = new Restaurant();
         restaurant.setId(id);
-        restaurant.setName(name.trim());
-        restaurant.setAddress(address.trim());
+        restaurant.setName(name);
+        restaurant.setAddress(address);
         restaurant.setKitchenType(kitchenType);
-        restaurant.setOpeningHours(openingHours.trim());
+        restaurant.setOpeningHours(openingHours);
         restaurant.setRestaurantOwnerId(restaurantOwnerId);
 
         return restaurant;
     }
 
     public void update(String name, String address, KitchenType kitchenType, String openingHours, UUID restaurantOwnerId) {
-        setName(name.trim());
-        setAddress(address.trim());
+        setName(name);
+        setAddress(address);
         setKitchenType(kitchenType);
-        setOpeningHours(openingHours.trim());
+        setOpeningHours(openingHours);
         setRestaurantOwnerId(restaurantOwnerId);
     }
 
@@ -93,12 +93,12 @@ public class Restaurant {
 
     private void setName(String name) {
         validateName(name);
-        this.name = name;
+        this.name = name.trim();
     }
 
     private void setAddress(String address) {
         validateAddress(address);
-        this.address = address;
+        this.address = address.trim();
     }
 
     private void setKitchenType(KitchenType kitchenType) {
@@ -108,7 +108,7 @@ public class Restaurant {
 
     private void setOpeningHours(String openingHours) {
         validateOpeningHours(openingHours);
-        this.openingHours = openingHours;
+        this.openingHours = openingHours.trim();
     }
 
     private void setRestaurantOwnerId(UUID restaurantOwnerId) {

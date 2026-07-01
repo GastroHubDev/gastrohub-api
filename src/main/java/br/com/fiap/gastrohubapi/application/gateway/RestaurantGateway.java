@@ -13,4 +13,5 @@ public interface RestaurantGateway {
     void delete(UUID uuid);
     Restaurant save(Restaurant restaurant);
     Restaurant update(Restaurant restaurant);
+    boolean existsById(UUID uuid);
 }
