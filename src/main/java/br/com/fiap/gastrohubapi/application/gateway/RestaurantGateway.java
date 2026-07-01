@@ -10,6 +10,7 @@ public interface RestaurantGateway {
     Optional<Restaurant> findById(UUID uuid);
     List<Restaurant> findByName(String name);
     List<Restaurant> findAll();
+    boolean existsById(UUID uuid);
     void delete(UUID uuid);
     Restaurant save(Restaurant restaurant);
     Restaurant update(Restaurant restaurant);

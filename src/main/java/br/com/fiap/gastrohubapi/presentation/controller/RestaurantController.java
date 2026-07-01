@@ -6,8 +6,6 @@ import br.com.fiap.gastrohubapi.application.usecase.restaurant.FindRestaurantByI
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.FindRestaurantByNameUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.ListRestaurantsUseCase;
 import br.com.fiap.gastrohubapi.application.usecase.restaurant.UpdateRestaurantUseCase;
-import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.NewRestaurantInput;
-import br.com.fiap.gastrohubapi.application.usecase.restaurant.input.UpdateRestaurantInput;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.presentation.dto.request.CreateRestaurantRequest;
 import br.com.fiap.gastrohubapi.presentation.dto.request.UpdateRestaurantRequest;
@@ -70,15 +68,7 @@ public class RestaurantController {
     })
     @PostMapping
     public ResponseEntity<RestaurantResponse> create(@Valid @RequestBody CreateRestaurantRequest request) {
-        final NewRestaurantInput input = new NewRestaurantInput(
-                request.name(),
-                request.address(),
-                request.kitchenType(),
-                request.openingHours(),
-                request.restaurantOwnerId()
-        );
-
-        final Restaurant restaurant = createRestaurantUseCase.run(input);
+        final Restaurant restaurant = createRestaurantUseCase.run(RestaurantMapper.toInput(request));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(RestaurantMapper.toResponse(restaurant));
     }
@@ -122,15 +112,7 @@ public class RestaurantController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<RestaurantResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateRestaurantRequest request) {
-        final UpdateRestaurantInput input = new UpdateRestaurantInput(
-                request.name(),
-                request.address(),
-                request.kitchenType(),
-                request.openingHours(),
-                request.restaurantOwnerId()
-        );
-
-        final Restaurant restaurant = updateRestaurantUseCase.run(id, input);
+        final Restaurant restaurant = updateRestaurantUseCase.run(id, RestaurantMapper.toInput(request));
 
         return ResponseEntity.ok(RestaurantMapper.toResponse(restaurant));
     }

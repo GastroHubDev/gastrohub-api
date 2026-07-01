@@ -7,17 +7,17 @@ import java.util.List;
 
 public class ListRestaurantsUseCase {
 
-    private final RestaurantGateway gateway;
+    private final RestaurantGateway restaurantGateway;
 
-    private ListRestaurantsUseCase(RestaurantGateway gateway) {
-        this.gateway = gateway;
+    private ListRestaurantsUseCase(RestaurantGateway restaurantGateway) {
+        this.restaurantGateway = restaurantGateway;
     }
 
-    public static ListRestaurantsUseCase create(RestaurantGateway gateway) {
-        return new ListRestaurantsUseCase(gateway);
+    public static ListRestaurantsUseCase create(RestaurantGateway restaurantGateway) {
+        return new ListRestaurantsUseCase(restaurantGateway);
     }
 
     public List<Restaurant> run() {
-        return gateway.findAll();
+        return restaurantGateway.findAll();
     }
 }

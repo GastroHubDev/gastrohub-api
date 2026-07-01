@@ -32,6 +32,11 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
     }
 
     @Override
+    public boolean existsById(UUID uuid) {
+        return repository.existsById(uuid);
+    }
+
+    @Override
     public void delete(UUID uuid) {
         repository.deleteById(uuid);
     }

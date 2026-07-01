@@ -6,20 +6,21 @@ import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException
 import java.util.UUID;
 
 public class DeleteRestaurantUseCase {
-    private final RestaurantGateway gateway;
+    private final RestaurantGateway restaurantGateway;
 
     private DeleteRestaurantUseCase(RestaurantGateway restaurantGateway) {
-        this.gateway = restaurantGateway;
+        this.restaurantGateway = restaurantGateway;
     }
 
-    public static DeleteRestaurantUseCase create(RestaurantGateway gateway) {
-        return new DeleteRestaurantUseCase(gateway);
+    public static DeleteRestaurantUseCase create(RestaurantGateway restaurantGateway) {
+        return new DeleteRestaurantUseCase(restaurantGateway);
     }
 
     public void run(UUID uuid) {
-        gateway.findById(uuid)
-                .orElseThrow(() -> new RestaurantNotFoundByIdException("Restaurant id: " + uuid));
+        if (!restaurantGateway.existsById(uuid)) {
+            throw new RestaurantNotFoundByIdException("Restaurant id: " + uuid);
+        }
 
-        gateway.delete(uuid);
+        restaurantGateway.delete(uuid);
     }
 }
