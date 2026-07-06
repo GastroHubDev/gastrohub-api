@@ -1,6 +1,7 @@
 package br.com.fiap.gastrohubapi.infrastructure.config;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
+import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
 import br.com.fiap.gastrohubapi.application.usecase.user.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class UserUseCaseConfig {
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserGateway userGateway) {
-        return new CreateUserUseCase(userGateway);
+    public CreateUserUseCase createUserUseCase(UserGateway userGateway, UserTypeGateway userTypeGateway) {
+        return new CreateUserUseCase(userGateway, userTypeGateway);
     }
 
     @Bean
@@ -29,8 +30,8 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(UserGateway userGateway){
-        return new UpdateUserUseCase(userGateway);
+    public UpdateUserUseCase updateUserUseCase(UserGateway userGateway, UserTypeGateway userTypeGateway){
+        return new UpdateUserUseCase(userGateway, userTypeGateway);
     }
 
     @Bean

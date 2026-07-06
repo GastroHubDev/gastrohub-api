@@ -87,14 +87,12 @@ class RestaurantTest {
                     .hasMessage("RestaurantOwnerId cannot be null");
         }
 
-        // Documentacao do comportamento atual: create() chama name.trim() ANTES de validar,
-        // entao um nome null estoura NullPointerException, e nao IllegalArgumentException.
-        // O mesmo vale para address e openingHours. (Possivel correcao futura.)
         @Test
-        void shouldThrowNpeWhenNameIsNullDueToTrimBeforeValidation() {
+        void shouldRejectNullName() {
             assertThatThrownBy(() ->
                     Restaurant.create(null, ADDRESS, KITCHEN_TYPE, OPENING_HOURS, UUID.randomUUID()))
-                    .isInstanceOf(NullPointerException.class);
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Name cannot be null or empty");
         }
     }
 

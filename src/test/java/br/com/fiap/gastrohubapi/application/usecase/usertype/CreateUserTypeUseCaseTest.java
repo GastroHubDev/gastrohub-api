@@ -33,7 +33,7 @@ class CreateUserTypeUseCaseTest {
 
     @Test
     void shouldCreateUserType() {
-        UserType savedUserType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.existsByName("Client")).thenReturn(false);
         when(userTypeGateway.save(any(UserType.class))).thenReturn(savedUserType);
@@ -54,7 +54,7 @@ class CreateUserTypeUseCaseTest {
 
     @Test
     void shouldTrimNameBeforeCreatingUserType() {
-        UserType savedUserType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.existsByName("Client")).thenReturn(false);
         when(userTypeGateway.save(any(UserType.class))).thenReturn(savedUserType);

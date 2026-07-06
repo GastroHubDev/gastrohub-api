@@ -3,6 +3,7 @@ package br.com.fiap.gastrohubapi.presentation.exceptionhandler;
 import br.com.fiap.gastrohubapi.domain.exception.MenuItemNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
+import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,13 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({RestaurantNotFoundByIdException.class, UserNotFoundException.class})
+    @ExceptionHandler({RestaurantNotFoundByIdException.class, UserNotFoundException.class, MenuItemNotFoundException.class})
     public ResponseEntity<Map<String, Object>> handleNotFound(RuntimeException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(RestaurantAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleConflict(RestaurantAlreadyExistsException ex) {
+    @ExceptionHandler({RestaurantAlreadyExistsException.class, UserAlreadyExistsException.class})
+    public ResponseEntity<Map<String, Object>> handleConflict(RuntimeException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
@@ -41,12 +42,6 @@ public class GlobalExceptionHandler {
                 .orElse("Invalid request");
 
         return buildResponse(HttpStatus.BAD_REQUEST, message);
-    }
-
-    @ExceptionHandler(MenuItemNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleMenuItemNotFound(MenuItemNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", ex.getMessage()));
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {

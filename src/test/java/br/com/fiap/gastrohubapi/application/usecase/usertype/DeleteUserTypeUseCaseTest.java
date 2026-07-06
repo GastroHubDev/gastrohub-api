@@ -33,7 +33,7 @@ class DeleteUserTypeUseCaseTest {
 
     @Test
     void shouldDeleteUserType() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(userType));
         when(userTypeGateway.isInUse(1L)).thenReturn(false);
@@ -56,7 +56,7 @@ class DeleteUserTypeUseCaseTest {
 
     @Test
     void shouldThrowWhenUserTypeIsInUse() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(userType));
         when(userTypeGateway.isInUse(1L)).thenReturn(true);

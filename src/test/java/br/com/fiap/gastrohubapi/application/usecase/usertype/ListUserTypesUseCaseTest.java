@@ -30,8 +30,8 @@ class ListUserTypesUseCaseTest {
     @Test
     void shouldListUserTypes() {
         List<UserType> userTypes = List.of(
-                new UserType(1L, "Client", BaseCategory.CLIENT),
-                new UserType(2L, "Owner", BaseCategory.OWNER)
+                UserType.restore(1L, "Client", BaseCategory.CLIENT),
+                UserType.restore(2L, "Owner", BaseCategory.OWNER)
         );
 
         when(userTypeGateway.findAll()).thenReturn(userTypes);

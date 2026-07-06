@@ -20,7 +20,7 @@ public class CreateUserTypeUseCase {
             throw new DuplicateUserTypeNameException("User type name already exists.");
         }
 
-        UserType userType = new UserType(null, normalizedName, baseCategory);
+        UserType userType = UserType.create(normalizedName, baseCategory);
 
         return userTypeGateway.save(userType);
     }

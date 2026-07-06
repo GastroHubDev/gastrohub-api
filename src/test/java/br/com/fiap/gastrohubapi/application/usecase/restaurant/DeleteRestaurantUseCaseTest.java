@@ -1,8 +1,6 @@
 package br.com.fiap.gastrohubapi.application.usecase.restaurant;
 
 import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
-import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
-import br.com.fiap.gastrohubapi.domain.enums.KitchenType;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,9 +31,7 @@ class DeleteRestaurantUseCaseTest {
     @Test
     void shouldDeleteWhenRestaurantExists() {
         UUID id = UUID.randomUUID();
-        Restaurant restaurant = Restaurant.restore(id, "Cantina da Nona", "Rua das Flores, 123",
-                KitchenType.ITALIAN, "08:00-22:00", UUID.randomUUID());
-        when(gateway.findById(id)).thenReturn(Optional.of(restaurant));
+        when(gateway.existsById(id)).thenReturn(true);
 
         useCase.run(id);
 
@@ -46,7 +41,7 @@ class DeleteRestaurantUseCaseTest {
     @Test
     void shouldThrowWhenRestaurantNotFound() {
         UUID id = UUID.randomUUID();
-        when(gateway.findById(id)).thenReturn(Optional.empty());
+        when(gateway.existsById(id)).thenReturn(false);
 
         assertThatThrownBy(() -> useCase.run(id))
                 .isInstanceOf(RestaurantNotFoundByIdException.class);
