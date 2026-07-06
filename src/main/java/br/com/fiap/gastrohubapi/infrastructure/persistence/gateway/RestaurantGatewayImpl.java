@@ -53,4 +53,9 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
         return repository.findAll()
                 .stream().map(RestaurantJpaEntity::toDomain).toList();
     }
+
+    @Override
+    public boolean existsById(UUID uuid) {
+        return repository.existsById(uuid);
+    }
 }

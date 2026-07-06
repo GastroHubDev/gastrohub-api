@@ -1,10 +1,6 @@
 package br.com.fiap.gastrohubapi.presentation.exceptionhandler;
 
-import br.com.fiap.gastrohubapi.domain.exception.MenuItemNotFoundException;
-import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
-import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
-import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
-import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
+import br.com.fiap.gastrohubapi.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,15 +14,24 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+
+
+    @ExceptionHandler({RestaurantAlreadyExistsException.class, UserAlreadyExistsException.class})
+    public ResponseEntity<Map<String, Object>> handleConflict(RuntimeException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler({RestaurantNotFoundByIdException.class, UserNotFoundException.class})
     public ResponseEntity<Map<String, Object>> handleNotFound(RuntimeException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(RestaurantAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleConflict(RestaurantAlreadyExistsException ex) {
-        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
-    }
+//    @ExceptionHandler(RestaurantAlreadyExistsException.class)
+//    public ResponseEntity<Map<String, Object>> handleConflict(RestaurantAlreadyExistsException ex) {
+//        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+//    }
+
+    // Ajustei Aqui, estava dando erro de ambiguidade na hora de compilar.
 
     @ExceptionHandler({IllegalArgumentException.class, UserTypeNotAllowedForRestaurantOwnerException.class})
     public ResponseEntity<Map<String, Object>> handleInvalidArgument(RuntimeException ex) {

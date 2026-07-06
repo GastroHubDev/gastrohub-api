@@ -16,11 +16,9 @@ public class UpdateUserUseCase {
     }
 
     public User execute(UpdateUserDTO dto) {
-        // 1. Verifica se o usuário existe
         User existingUser = this.userGateway.findById(dto.id())
                 .orElseThrow(() -> new UserNotFoundException("User ID: " + dto.id() + " not found."));
 
-        // 2. Se ele estiver tentando trocar o e-mail, garante que o novo e-mail já não existe
         if (!existingUser.getEmail().equals(dto.email())) {
             if (this.userGateway.findByEmail(dto.email()).isPresent()) {
                 throw new UserAlreadyExistsException("Email " + dto.email() + " is already in use.");

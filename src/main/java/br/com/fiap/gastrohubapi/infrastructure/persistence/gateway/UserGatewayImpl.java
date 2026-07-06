@@ -35,13 +35,6 @@ public class UserGatewayImpl implements UserGateway {
                 .toList();
     }
 
-//    @Override
-//    public User findByName(String name) {
-//        UserJpaEntity entity = this.userRepository.findByName(name)
-//                .orElseThrow(() -> new UserNotFoundException("User " + name + " not found"));
-//
-//        return mapToDomain(entity);
-//    }
 
     @Override
     public Optional<User> findByEmail(String email) {
@@ -72,7 +65,6 @@ public class UserGatewayImpl implements UserGateway {
     @Override
     public User update(User updatedUser) {
 
-        // Passa o ID direto no construtor novo! Fim do problema.
         UserTypeJpaEntity typeJpa = new UserTypeJpaEntity(updatedUser.getUserType().getId());
 
         UserJpaEntity entityToUpdate = new UserJpaEntity(
