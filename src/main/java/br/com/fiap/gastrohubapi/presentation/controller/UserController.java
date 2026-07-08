@@ -59,7 +59,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
-        NewUserDTO useCaseInput = new NewUserDTO(null, request.name(), request.email(), request.userTypeId(), request.password());
+        NewUserDTO useCaseInput = new NewUserDTO(request.name(), request.email(), request.userTypeId(), request.password());
         var user = this.createUserUseCase.run(useCaseInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userMapper.toResponseDTO(user));
     }
