@@ -1,11 +1,15 @@
 package br.com.fiap.gastrohubapi.presentation.exceptionhandler;
 
+import br.com.fiap.gastrohubapi.domain.exception.DuplicateUserTypeNameException;
+import br.com.fiap.gastrohubapi.domain.exception.InvalidUserTypeException;
 import br.com.fiap.gastrohubapi.domain.exception.MenuItemNotFoundException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantAlreadyExistsException;
 import br.com.fiap.gastrohubapi.domain.exception.RestaurantNotFoundByIdException;
 import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
+import br.com.fiap.gastrohubapi.domain.exception.UserTypeInUseException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotAllowedForRestaurantOwnerException;
+import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,17 +23,31 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({RestaurantNotFoundByIdException.class, UserNotFoundException.class, MenuItemNotFoundException.class})
+    @ExceptionHandler({
+            RestaurantNotFoundByIdException.class,
+            UserNotFoundException.class,
+            MenuItemNotFoundException.class,
+            UserTypeNotFoundException.class
+    })
     public ResponseEntity<Map<String, Object>> handleNotFound(RuntimeException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({RestaurantAlreadyExistsException.class, UserAlreadyExistsException.class})
+    @ExceptionHandler({
+            RestaurantAlreadyExistsException.class,
+            UserAlreadyExistsException.class,
+            DuplicateUserTypeNameException.class,
+            UserTypeInUseException.class
+    })
     public ResponseEntity<Map<String, Object>> handleConflict(RuntimeException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, UserTypeNotAllowedForRestaurantOwnerException.class})
+    @ExceptionHandler({
+            IllegalArgumentException.class,
+            UserTypeNotAllowedForRestaurantOwnerException.class,
+            InvalidUserTypeException.class
+    })
     public ResponseEntity<Map<String, Object>> handleInvalidArgument(RuntimeException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
