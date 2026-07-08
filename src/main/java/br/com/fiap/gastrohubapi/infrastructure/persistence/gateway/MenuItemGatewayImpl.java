@@ -3,7 +3,7 @@ package br.com.fiap.gastrohubapi.infrastructure.persistence.gateway;
 import br.com.fiap.gastrohubapi.application.gateway.MenuItemGateway;
 import br.com.fiap.gastrohubapi.domain.entity.MenuItem;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.MenuItemJpaEntity;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemRepository;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemJpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public class MenuItemGatewayImpl implements MenuItemGateway {
 
-    private final MenuItemRepository repository;
+    private final MenuItemJpaRepository repository;
 
-    public MenuItemGatewayImpl(MenuItemRepository repository) {
+    public MenuItemGatewayImpl(MenuItemJpaRepository repository) {
         this.repository = repository;
     }
 

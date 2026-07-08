@@ -10,7 +10,7 @@ class UserTypeTest {
 
     @Test
     void shouldCreateUserType() {
-        UserType userType = new UserType(1L, "Owner", BaseCategory.OWNER);
+        UserType userType = UserType.restore(1L, "Owner", BaseCategory.OWNER);
 
         assertEquals(1L, userType.getId());
         assertEquals("Owner", userType.getName());
@@ -19,7 +19,7 @@ class UserTypeTest {
 
     @Test
     void shouldTrimNameWhenCreatingUserType() {
-        UserType userType = new UserType(1L, "  Client  ", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "  Client  ", BaseCategory.CLIENT);
 
         assertEquals("Client", userType.getName());
     }
@@ -28,7 +28,7 @@ class UserTypeTest {
     void shouldThrowExceptionWhenNameIsNull() {
         InvalidUserTypeException exception = assertThrows(
                 InvalidUserTypeException.class,
-                () -> new UserType(1L, null, BaseCategory.CLIENT)
+                () -> UserType.restore(1L, null, BaseCategory.CLIENT)
         );
 
         assertEquals("User type name is required.", exception.getMessage());
@@ -38,7 +38,7 @@ class UserTypeTest {
     void shouldThrowExceptionWhenNameIsBlank() {
         InvalidUserTypeException exception = assertThrows(
                 InvalidUserTypeException.class,
-                () -> new UserType(1L, "   ", BaseCategory.CLIENT)
+                () -> UserType.restore(1L, "   ", BaseCategory.CLIENT)
         );
 
         assertEquals("User type name is required.", exception.getMessage());
@@ -48,7 +48,7 @@ class UserTypeTest {
     void shouldThrowExceptionWhenBaseCategoryIsNull() {
         InvalidUserTypeException exception = assertThrows(
                 InvalidUserTypeException.class,
-                () -> new UserType(1L, "Client", null)
+                () -> UserType.restore(1L, "Client", null)
         );
 
         assertEquals("Base category is required.", exception.getMessage());
@@ -56,7 +56,7 @@ class UserTypeTest {
 
     @Test
     void shouldUpdateUserType() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         userType.update("Owner", BaseCategory.OWNER);
 
@@ -66,7 +66,7 @@ class UserTypeTest {
 
     @Test
     void shouldTrimNameWhenUpdatingUserType() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         userType.update("  Owner  ", BaseCategory.OWNER);
 
@@ -75,7 +75,7 @@ class UserTypeTest {
 
     @Test
     void shouldThrowExceptionWhenUpdatingWithBlankName() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         InvalidUserTypeException exception = assertThrows(
                 InvalidUserTypeException.class,
@@ -87,7 +87,7 @@ class UserTypeTest {
 
     @Test
     void shouldThrowExceptionWhenUpdatingWithNullBaseCategory() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         InvalidUserTypeException exception = assertThrows(
                 InvalidUserTypeException.class,

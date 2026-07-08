@@ -4,7 +4,7 @@ import br.com.fiap.gastrohubapi.application.gateway.MenuItemGateway;
 import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.application.usecase.menuitem.*;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.gateway.MenuItemGatewayImpl;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemRepository;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemJpaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class MenuItemConfig {
 
     @Bean
-    public MenuItemGateway menuItemGateway(MenuItemRepository repository) {
+    public MenuItemGateway menuItemGateway(MenuItemJpaRepository repository) {
         return new MenuItemGatewayImpl(repository);
     }
 
