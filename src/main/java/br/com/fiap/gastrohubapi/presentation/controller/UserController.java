@@ -59,7 +59,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
-        NewUserDTO useCaseInput = new NewUserDTO(null, request.name(), request.email(), request.userType(), request.password());
+        NewUserDTO useCaseInput = new NewUserDTO(request.name(), request.email(), request.userTypeId(), request.password());
         var user = this.createUserUseCase.run(useCaseInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userMapper.toResponseDTO(user));
     }
@@ -105,7 +105,7 @@ public class UserController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateUserRequest request) {
-        UpdateUserDTO useCaseInput = new UpdateUserDTO(id, request.name(), request.email(), request.userType(), request.password());
+        UpdateUserDTO useCaseInput = new UpdateUserDTO(id, request.name(), request.email(), request.userTypeId(), request.password());
         var updatedUser = this.updateUserUseCase.execute(useCaseInput);
         return ResponseEntity.ok(this.userMapper.toResponseDTO(updatedUser));
     }

@@ -37,8 +37,8 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldUpdateUserType() {
-        UserType existingUserType = new UserType(1L, "Client", BaseCategory.CLIENT);
-        UserType savedUserType = new UserType(1L, "Owner", BaseCategory.OWNER);
+        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(1L, "Owner", BaseCategory.OWNER);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
         when(userTypeGateway.existsByNameAndIdNot("Owner", 1L)).thenReturn(false);
@@ -72,7 +72,7 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldThrowWhenNameAlreadyExistsForAnotherUserType() {
-        UserType existingUserType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
         when(userTypeGateway.existsByNameAndIdNot("Owner", 1L)).thenReturn(true);
@@ -86,7 +86,7 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldThrowWhenChangingBaseCategoryAndUserTypeIsInUse() {
-        UserType existingUserType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
         when(userTypeGateway.existsByNameAndIdNot("Client", 1L)).thenReturn(false);

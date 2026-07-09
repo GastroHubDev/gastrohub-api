@@ -42,7 +42,7 @@ public class UserTypeJpaEntity {
     }
 
     public UserType toDomain() {
-        return new UserType(id, name, baseCategory);
+        return UserType.restore(id, name, baseCategory);
     }
 
     public Long getId() {

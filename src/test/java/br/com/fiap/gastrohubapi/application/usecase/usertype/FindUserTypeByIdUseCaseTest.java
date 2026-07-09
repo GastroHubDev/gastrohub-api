@@ -31,7 +31,7 @@ class FindUserTypeByIdUseCaseTest {
 
     @Test
     void shouldFindUserTypeById() {
-        UserType userType = new UserType(1L, "Owner", BaseCategory.OWNER);
+        UserType userType = UserType.restore(1L, "Owner", BaseCategory.OWNER);
 
         when(userTypeGateway.findById(1L)).thenReturn(Optional.of(userType));
 

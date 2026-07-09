@@ -2,10 +2,8 @@ package br.com.fiap.gastrohubapi.infrastructure.persistence.gateway;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserJpaEntity;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserTypeJpaEntity;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.UserRepository;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.UserJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,76 +13,52 @@ import java.util.UUID;
 @Component
 public class UserGatewayImpl implements UserGateway {
 
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
-    public UserGatewayImpl(UserRepository userRepository) {
+    public UserGatewayImpl(UserJpaRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public Optional<User> findById(UUID uuid) {
         return this.userRepository.findById(uuid)
-                .map(this::mapToDomain);
+                .map(UserJpaEntity::toDomain);
     }
 
     @Override
     public List<User> findByName(String name) {
         return this.userRepository.findByName(name)
                 .stream()
-                .map(this::mapToDomain)
+                .map(UserJpaEntity::toDomain)
                 .toList();
     }
-
 
     @Override
     public Optional<User> findByEmail(String email) {
         return this.userRepository.findByEmail(email)
-                .map(this::mapToDomain);
+                .map(UserJpaEntity::toDomain);
     }
 
     @Override
     public User save(User newUser) {
-        UserJpaEntity entityToSave = new UserJpaEntity(newUser.getId(), newUser.getName(), newUser.getEmail(), newUser.getPassword(), UserTypeJpaEntity.fromDomain(newUser.getUserType())
-        );
+        UserJpaEntity entityToSave = UserJpaEntity.fromDomain(newUser);
 
-        UserJpaEntity savedEntity = this.userRepository.save(entityToSave);
-
-        return mapToDomain(savedEntity);
-    }
-
-    private User mapToDomain(UserJpaEntity entity) {
-        return User.restore(
-                entity.getId(),
-                entity.getName(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getUserType().toDomain()
-        );
+        return this.userRepository.save(entityToSave).toDomain();
     }
 
     @Override
     public User update(User updatedUser) {
-
-        UserTypeJpaEntity typeJpa = new UserTypeJpaEntity(updatedUser.getUserType().getId());
-
-        UserJpaEntity entityToUpdate = new UserJpaEntity(
-                updatedUser.getId(),
-                updatedUser.getName(),
-                updatedUser.getEmail(),
-                updatedUser.getPassword(),
-                typeJpa
-        );
-
+        UserJpaEntity entityToUpdate = UserJpaEntity.fromDomain(updatedUser);
         entityToUpdate.markNotNew();
 
-        return mapToDomain(this.userRepository.save(entityToUpdate));
+        return this.userRepository.save(entityToUpdate).toDomain();
     }
 
     @Override
     public List<User> findAll() {
         return this.userRepository.findAll()
                 .stream()
-                .map(this::mapToDomain)
+                .map(UserJpaEntity::toDomain)
                 .toList();
     }
 

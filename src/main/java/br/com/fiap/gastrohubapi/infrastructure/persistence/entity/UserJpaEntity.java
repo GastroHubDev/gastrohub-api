@@ -1,5 +1,6 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
+import br.com.fiap.gastrohubapi.domain.entity.User;
 import jakarta.persistence.*;
 import org.springframework.data.domain.Persistable;
 
@@ -73,5 +74,19 @@ public class UserJpaEntity implements Persistable<UUID> {
 
     public UserTypeJpaEntity getUserType() {
         return userType;
+    }
+
+    public static UserJpaEntity fromDomain(User user) {
+        return new UserJpaEntity(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                UserTypeJpaEntity.fromDomain(user.getUserType())
+        );
+    }
+
+    public User toDomain() {
+        return User.restore(id, name, email, password, userType.toDomain());
     }
 }

@@ -13,7 +13,7 @@ class UserTypeMapperTest {
 
     @Test
     void toResponse_shouldMapAllFields() {
-        UserType userType = new UserType(1L, "Client", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
 
         UserTypeResponse response = UserTypeMapper.toResponse(userType);
 
@@ -25,8 +25,8 @@ class UserTypeMapperTest {
     @Test
     void toResponseList_shouldMapAllItems() {
         List<UserType> userTypes = List.of(
-                new UserType(1L, "Client", BaseCategory.CLIENT),
-                new UserType(2L, "Owner", BaseCategory.OWNER)
+                UserType.restore(1L, "Client", BaseCategory.CLIENT),
+                UserType.restore(2L, "Owner", BaseCategory.OWNER)
         );
 
         List<UserTypeResponse> response = UserTypeMapper.toResponseList(userTypes);
