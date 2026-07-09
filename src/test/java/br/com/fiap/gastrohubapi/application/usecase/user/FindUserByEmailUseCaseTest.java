@@ -12,8 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -23,30 +23,30 @@ class FindUserByEmailUseCaseTest {
 
     @Mock private UserGateway userGateway;
     private FindUserByEmailUseCase useCase;
-    private UUID userId;
     private User expectedUser;
+
+    private static final String EMAIL = "v@test.com";
 
     @BeforeEach
     void setUp() {
         useCase = new FindUserByEmailUseCase(userGateway);
-        userId = UUID.randomUUID();
-        UserType userType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
-        expectedUser = User.create("Joao", "v@test.com", "123", userType);
+        UserType userType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
+        expectedUser = User.create("Joao", EMAIL, "123", userType);
     }
 
     @Test
-    void shouldFindUserById() {
-        when(userGateway.findById(userId)).thenReturn(Optional.of(expectedUser));
-        User result = useCase.execute(String.valueOf(userId));
+    void shouldFindUserByEmail() {
+        when(userGateway.findByEmail(EMAIL)).thenReturn(Optional.of(expectedUser));
+
+        User result = useCase.execute(EMAIL);
+
         assertNotNull(result);
+        assertEquals(EMAIL, result.getEmail());
     }
-
-
-
 
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
-        when(userGateway.findById(userId)).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> useCase.execute(String.valueOf(userId)));
+        when(userGateway.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> useCase.execute(EMAIL));
     }
 }

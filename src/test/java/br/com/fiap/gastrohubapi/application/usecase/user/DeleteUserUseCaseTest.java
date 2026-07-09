@@ -32,9 +32,9 @@ class DeleteUserUseCaseTest {
     void setUp() {
         useCase = new DeleteUserUseCase(userGateway);
         userId = UUID.randomUUID();
-        UserType userType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
 
-        existingUser = User.create("Joao", "Joao@test.com", "123", userType);
+        existingUser = User.restore(userId, "Joao", "Joao@test.com", "123", userType);
     }
 
     @Test

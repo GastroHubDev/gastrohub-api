@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,14 +21,12 @@ class FindAllUsersUseCaseTest {
 
     @Mock private UserGateway userGateway;
     private FindAllUsersUseCase useCase;
-    private UUID userId;
     private User expectedUser;
 
     @BeforeEach
     void setUp() {
         useCase = new FindAllUsersUseCase(userGateway);
-        userId = UUID.randomUUID();
-        UserType validUserType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType validUserType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
         expectedUser = User.create("Joao", "v@test.com", "123", validUserType);    }
 
     @Test

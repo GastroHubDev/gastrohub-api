@@ -4,7 +4,6 @@ import br.com.fiap.gastrohubapi.application.usecase.user.*;
 import br.com.fiap.gastrohubapi.application.usecase.user.input.NewUserDTO;
 import br.com.fiap.gastrohubapi.application.usecase.user.input.UpdateUserDTO;
 import br.com.fiap.gastrohubapi.domain.entity.User;
-import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.presentation.dto.request.CreateUserRequest;
 import br.com.fiap.gastrohubapi.presentation.dto.request.UpdateUserRequest;
 import br.com.fiap.gastrohubapi.presentation.dto.response.UserResponse;
@@ -26,7 +25,6 @@ import static br.com.fiap.gastrohubapi.domain.entity.BaseCategory.CLIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,9 +42,10 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    private static final Long USER_TYPE_ID = 1L;
+
     private UUID userId;
     private User mockUser;
-    private UserType mockUserType;
     private UserResponse mockUserResponse;
 
     @BeforeEach
@@ -54,14 +53,13 @@ class UserControllerTest {
         userId = UUID.randomUUID();
 
         mockUser = mock(User.class);
-        mockUserType = mock(UserType.class);
 
         mockUserResponse = new UserResponse(userId, "Joao", "Joao@test.com", new UserTypeResponse(1L, "CLIENT", CLIENT));
     }
 
     @Test
     void shouldCreateUserAndReturn201Created() {
-        CreateUserRequest request = new CreateUserRequest("Joao", "Joao@test.com", mockUserType, "password123");
+        CreateUserRequest request = new CreateUserRequest("Joao", "Joao@test.com", USER_TYPE_ID, "password123");
 
         when(createUserUseCase.run(any(NewUserDTO.class))).thenReturn(mockUser);
         when(userMapper.toResponseDTO(mockUser)).thenReturn(mockUserResponse);
@@ -126,7 +124,7 @@ class UserControllerTest {
     @Test
     void shouldUpdateUserAndReturn200Ok() {
         // Arrange
-        UpdateUserRequest request = new UpdateUserRequest("Joao Atualizado", "novo@test.com", mockUserType, "newpass");
+        UpdateUserRequest request = new UpdateUserRequest("Joao Atualizado", "novo@test.com", USER_TYPE_ID, "newpass");
 
         when(updateUserUseCase.execute(any(UpdateUserDTO.class))).thenReturn(mockUser);
         when(userMapper.toResponseDTO(mockUser)).thenReturn(mockUserResponse);

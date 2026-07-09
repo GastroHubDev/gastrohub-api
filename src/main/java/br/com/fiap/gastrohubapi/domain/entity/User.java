@@ -83,10 +83,6 @@ public class User {
         this.userType = userType;
     }
 
-    private void setId(UUID id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         validateName(name);
         this.name = name;

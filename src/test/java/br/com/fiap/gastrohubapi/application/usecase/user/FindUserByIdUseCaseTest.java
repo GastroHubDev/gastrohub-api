@@ -35,7 +35,7 @@ class FindUserByIdUseCaseTest {
         useCase = new FindUserByIdUseCase(userGateway); 
         userId = UUID.randomUUID();
 
-        UserType userType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
         expectedUser = User.create("Joao", "v@test.com", "123", userType);
     }
 

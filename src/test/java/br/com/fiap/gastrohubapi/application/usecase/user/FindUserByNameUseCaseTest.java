@@ -32,7 +32,7 @@ class FindUserByNameUseCaseTest {
     @Test
     void shouldReturnUserListByName() {
 
-        UserType userType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
 
         User user = User.create(SEARCH_NAME, "v@test.com", "123", userType);
         when(userGateway.findByName(SEARCH_NAME)).thenReturn(List.of(user));

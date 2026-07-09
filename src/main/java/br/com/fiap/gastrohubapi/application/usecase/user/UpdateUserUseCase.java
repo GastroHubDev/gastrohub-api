@@ -24,10 +24,8 @@ public class UpdateUserUseCase {
         User existingUser = this.userGateway.findById(dto.id())
                 .orElseThrow(() -> new UserNotFoundException("User ID: " + dto.id() + " not found."));
 
-        if (!existingUser.getEmail().equals(dto.email())) {
-            if (this.userGateway.findByEmail(dto.email()).isPresent()) {
+        if (!existingUser.getEmail().equals(dto.email()) && this.userGateway.findByEmail(dto.email()).isPresent()) {
                 throw new UserAlreadyExistsException("Email " + dto.email() + " is already in use.");
-            }
         }
 
         final UserType userType = this.userTypeGateway.findById(dto.userTypeId())

@@ -18,9 +18,9 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        clientUserType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+        clientUserType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
 
-        adminUserType = new UserType(2L, "ADMIN", BaseCategory.OWNER);
+        adminUserType = UserType.restore(2L, "ADMIN", BaseCategory.OWNER);
     }
 
 
