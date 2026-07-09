@@ -1,7 +1,7 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.gateway;
 
 import br.com.fiap.gastrohubapi.domain.entity.MenuItem;
-import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemRepository;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MenuItemGatewayImplTest {
 
     @Autowired
-    private MenuItemRepository repository;
+    private MenuItemJpaRepository repository;
 
     private MenuItemGatewayImpl gateway;
 
@@ -80,7 +80,7 @@ class MenuItemGatewayImplTest {
         List<MenuItem> items = gateway.findAllByRestaurantId(restaurantId);
 
         assertThat(items).hasSize(1);
-        assertThat(items.get(0).getName()).isEqualTo("Pizza");
+        assertThat(items.getFirst().getName()).isEqualTo("Pizza");
     }
 
     @Test
