@@ -1,0 +1,71 @@
+package br.com.fiap.gastrohubapi.application.usecase.user;
+
+import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
+import br.com.fiap.gastrohubapi.application.usecase.user.input.NewUserDTO;
+import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.entity.User;
+import br.com.fiap.gastrohubapi.domain.entity.UserType;
+import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class CreateUserUseCaseTest {
+
+    @Mock
+    private UserGateway userGateway;
+
+    private CreateUserUseCase useCase;
+
+    private static final String NAME = "Joao";
+    private static final String EMAIL = "Joao@test.com";
+    private static final String PASSWORD = "password123";
+
+    private NewUserDTO input;
+    private User expectedUser;
+    private UserType userType;
+
+    @BeforeEach
+    void setUp() {
+        useCase = new CreateUserUseCase(userGateway);
+        UserType userType = new UserType(1L, "CLIENT", BaseCategory.CLIENT);
+
+        input = new NewUserDTO(null, NAME, EMAIL, userType, PASSWORD);
+        expectedUser = User.create(NAME, EMAIL, PASSWORD, userType);
+    }
+
+    @Test
+    void shouldCreateUserSuccessfully() {
+        when(userGateway.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        when(userGateway.save(any(User.class))).thenReturn(expectedUser);
+
+        User result = useCase.run(input);
+
+        assertNotNull(result);
+        assertEquals(NAME, result.getName());
+        assertEquals(EMAIL, result.getEmail());
+
+        verify(userGateway, times(1)).findByEmail(EMAIL);
+        verify(userGateway, times(1)).save(any(User.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailAlreadyExists() {
+        when(userGateway.findByEmail(EMAIL)).thenReturn(Optional.of(expectedUser));
+
+        UserAlreadyExistsException exception = assertThrows(UserAlreadyExistsException.class,
+                () -> useCase.run(input));
+
+        assertEquals("User with email " + EMAIL + " already exists.", exception.getMessage());
+        verify(userGateway, never()).save(any(User.class));
+    }
+}

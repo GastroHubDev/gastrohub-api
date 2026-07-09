@@ -56,19 +56,7 @@ public class User {
         this.userType = userType;
     }
 
-//    public User(UUID id, String name, String email, String password,UserType userType){
-//
-//        validateName(name);
-//        validateEmail(email);
-//        validatePassword(password);
-//        validateUserType(userType);
-//
-//        this.id = id;
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-//        this.userType = userType;
-//    }
+
 
     public UUID getId() {
         return id;

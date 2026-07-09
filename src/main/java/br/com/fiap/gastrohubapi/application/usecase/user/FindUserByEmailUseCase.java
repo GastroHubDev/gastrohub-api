@@ -4,6 +4,8 @@ import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
 
+import java.util.UUID;
+
 public class FindUserByEmailUseCase {
 
     private final UserGateway userGateway;
@@ -16,4 +18,6 @@ public class FindUserByEmailUseCase {
         return this.userGateway.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found."));
     }
+
+
 }
