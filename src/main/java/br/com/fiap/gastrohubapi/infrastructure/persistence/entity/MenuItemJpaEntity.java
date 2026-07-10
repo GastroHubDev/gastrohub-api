@@ -1,5 +1,6 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
+import br.com.fiap.gastrohubapi.domain.entity.MenuItem;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -41,6 +42,22 @@ public class MenuItemJpaEntity {
         this.onlyInRestaurant = onlyInRestaurant;
         this.photoPath = photoPath;
         this.restaurantId = restaurantId;
+    }
+
+    public static MenuItemJpaEntity fromDomain(MenuItem menuItem) {
+        return new MenuItemJpaEntity(
+                menuItem.getId(),
+                menuItem.getName(),
+                menuItem.getDescription(),
+                menuItem.getPrice(),
+                menuItem.isOnlyInRestaurant(),
+                menuItem.getPhotoPath(),
+                menuItem.getRestaurantId()
+        );
+    }
+
+    public MenuItem toDomain() {
+        return MenuItem.restore(id, name, description, price, onlyInRestaurant, photoPath, restaurantId);
     }
 
     public UUID getId() { return id; }

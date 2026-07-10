@@ -19,30 +19,30 @@ public class MenuItemGatewayImpl implements MenuItemGateway {
 
     @Override
     public MenuItem save(MenuItem menuItem) {
-        MenuItemJpaEntity saved = repository.save(toJpaEntity(menuItem));
-        return toDomainEntity(saved);
+        MenuItemJpaEntity saved = repository.save(MenuItemJpaEntity.fromDomain(menuItem));
+        return saved.toDomain();
     }
 
     @Override
     public Optional<MenuItem> findById(UUID id) {
-        return repository.findById(id).map(this::toDomainEntity);
+        return repository.findById(id).map(MenuItemJpaEntity::toDomain);
     }
 
     @Override
     public List<MenuItem> findAll() {
-        return repository.findAll().stream().map(this::toDomainEntity).toList();
+        return repository.findAll().stream().map(MenuItemJpaEntity::toDomain).toList();
     }
 
     @Override
     public List<MenuItem> findAllByRestaurantId(UUID restaurantId) {
         return repository.findAllByRestaurantId(restaurantId).stream()
-                .map(this::toDomainEntity).toList();
+                .map(MenuItemJpaEntity::toDomain).toList();
     }
 
     @Override
     public MenuItem update(MenuItem menuItem) {
-        MenuItemJpaEntity updated = repository.save(toJpaEntity(menuItem));
-        return toDomainEntity(updated);
+        MenuItemJpaEntity updated = repository.save(MenuItemJpaEntity.fromDomain(menuItem));
+        return updated.toDomain();
     }
 
     @Override
@@ -53,29 +53,5 @@ public class MenuItemGatewayImpl implements MenuItemGateway {
     @Override
     public boolean existsById(UUID id) {
         return repository.existsById(id);
-    }
-
-    private MenuItemJpaEntity toJpaEntity(MenuItem menuItem) {
-        return new MenuItemJpaEntity(
-                menuItem.getId(),
-                menuItem.getName(),
-                menuItem.getDescription(),
-                menuItem.getPrice(),
-                menuItem.isOnlyInRestaurant(),
-                menuItem.getPhotoPath(),
-                menuItem.getRestaurantId()
-        );
-    }
-
-    private MenuItem toDomainEntity(MenuItemJpaEntity jpaEntity) {
-        return MenuItem.restore(
-                jpaEntity.getId(),
-                jpaEntity.getName(),
-                jpaEntity.getDescription(),
-                jpaEntity.getPrice(),
-                jpaEntity.isOnlyInRestaurant(),
-                jpaEntity.getPhotoPath(),
-                jpaEntity.getRestaurantId()
-        );
     }
 }
