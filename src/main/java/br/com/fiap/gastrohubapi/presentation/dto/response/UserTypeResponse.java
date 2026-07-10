@@ -1,9 +1,11 @@
 package br.com.fiap.gastrohubapi.presentation.dto.response;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
+
+import java.util.UUID;
 
 public record UserTypeResponse(
-        Long id,
+        UUID id,
         String name,
         BaseCategory baseCategory
 ) {

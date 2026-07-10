@@ -68,7 +68,7 @@ class UserTypeControllerIntegrationTest {
 
     @Test
     void shouldFindUserTypeById() throws Exception {
-        Long id = createUserType("Owner", "OWNER");
+        String id = createUserType("Owner", "OWNER");
 
         mockMvc.perform(get("/user-types/{id}", id))
                 .andExpect(status().isOk())
@@ -79,7 +79,7 @@ class UserTypeControllerIntegrationTest {
 
     @Test
     void shouldUpdateUserType() throws Exception {
-        Long id = createUserType("Client", "CLIENT");
+        String id = createUserType("Client", "CLIENT");
 
         mockMvc.perform(put("/user-types/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ class UserTypeControllerIntegrationTest {
 
     @Test
     void shouldDeleteUserType() throws Exception {
-        Long id = createUserType("Client", "CLIENT");
+        String id = createUserType("Client", "CLIENT");
 
         mockMvc.perform(delete("/user-types/{id}", id))
                 .andExpect(status().isNoContent());
@@ -134,7 +134,7 @@ class UserTypeControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    private Long createUserType(String name, String baseCategory) throws Exception {
+    private String createUserType(String name, String baseCategory) throws Exception {
         MvcResult result = mockMvc.perform(post("/user-types")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -147,6 +147,6 @@ class UserTypeControllerIntegrationTest {
                 .andReturn();
 
         JsonNode body = objectMapper.readTree(result.getResponse().getContentAsString());
-        return body.get("id").asLong();
+        return body.get("id").asText();
     }
 }

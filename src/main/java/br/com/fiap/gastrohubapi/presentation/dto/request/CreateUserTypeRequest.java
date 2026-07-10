@@ -1,6 +1,6 @@
 package br.com.fiap.gastrohubapi.presentation.dto.request;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

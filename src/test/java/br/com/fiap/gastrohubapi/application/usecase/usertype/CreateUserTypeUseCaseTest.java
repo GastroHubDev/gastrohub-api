@@ -1,7 +1,8 @@
 package br.com.fiap.gastrohubapi.application.usecase.usertype;
 
+import java.util.UUID;
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.DuplicateUserTypeNameException;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserTypeUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock
     private UserTypeGateway userTypeGateway;
@@ -33,14 +36,14 @@ class CreateUserTypeUseCaseTest {
 
     @Test
     void shouldCreateUserType() {
-        UserType savedUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.existsByName("Client")).thenReturn(false);
         when(userTypeGateway.save(any(UserType.class))).thenReturn(savedUserType);
 
         UserType result = useCase.execute("Client", BaseCategory.CLIENT);
 
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(TYPE_ID_1);
         assertThat(result.getName()).isEqualTo("Client");
         assertThat(result.getBaseCategory()).isEqualTo(BaseCategory.CLIENT);
 
@@ -54,7 +57,7 @@ class CreateUserTypeUseCaseTest {
 
     @Test
     void shouldTrimNameBeforeCreatingUserType() {
-        UserType savedUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
 
         when(userTypeGateway.existsByName("Client")).thenReturn(false);
         when(userTypeGateway.save(any(UserType.class))).thenReturn(savedUserType);

@@ -3,7 +3,7 @@ package br.com.fiap.gastrohubapi.application.usecase.user;
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
 import br.com.fiap.gastrohubapi.application.usecase.user.input.UpdateUserDTO;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateUserUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock
     private UserGateway userGateway;
@@ -35,7 +37,7 @@ class UpdateUserUseCaseTest {
     private static final String NEW_NAME = "Joao Atualizado";
     private static final String NEW_EMAIL = "Joao.novo@test.com";
     private static final String PASSWORD = "password123";
-    private static final Long USER_TYPE_ID = 1L;
+    private static final UUID USER_TYPE_ID = TYPE_ID_1;
 
     private UUID userId;
     private UpdateUserDTO input;
@@ -76,7 +78,7 @@ class UpdateUserUseCaseTest {
 
     @Test
     void shouldThrowExceptionWhenNewEmailAlreadyInUseByAnotherUser() {
-        UserType userTypeLocal = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType userTypeLocal = UserType.restore(TYPE_ID_1, "CLIENT", BaseCategory.CLIENT);
 
         when(userGateway.findById(userId)).thenReturn(Optional.of(existingUser));
         when(userGateway.findByEmail(NEW_EMAIL)).thenReturn(Optional.of(User.create("Outro", NEW_EMAIL, "123", userTypeLocal)));

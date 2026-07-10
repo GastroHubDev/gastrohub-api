@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "User Types", description = "User type management endpoints")
 @RestController
@@ -60,7 +61,7 @@ public class UserTypeController {
             @ApiResponse(responseCode = "404", description = "User type not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UserTypeResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<UserTypeResponse> findById(@PathVariable UUID id) {
         UserType userType = findUserTypeByIdUseCase.execute(id);
         return ResponseEntity.ok(UserTypeMapper.toResponse(userType));
     }
@@ -86,7 +87,7 @@ public class UserTypeController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserTypeResponse> update(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @Valid @RequestBody UpdateUserTypeRequest request
     ) {
         UserType userType = updateUserTypeUseCase.execute(id, request.name(), request.baseCategory());
@@ -100,7 +101,7 @@ public class UserTypeController {
             @ApiResponse(responseCode = "409", description = "User type is in use")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteUserTypeUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }

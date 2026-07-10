@@ -1,11 +1,13 @@
 package br.com.fiap.gastrohubapi.application.usecase.usertype;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.DuplicateUserTypeNameException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeInUseException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotFoundException;
+
+import java.util.UUID;
 
 public class UpdateUserTypeUseCase {
 
@@ -15,7 +17,7 @@ public class UpdateUserTypeUseCase {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public UserType execute(Long id, String name, BaseCategory baseCategory) {
+    public UserType execute(UUID id, String name, BaseCategory baseCategory) {
         UserType userType = userTypeGateway.findById(id)
                 .orElseThrow(() -> new UserTypeNotFoundException("User type not found."));
 

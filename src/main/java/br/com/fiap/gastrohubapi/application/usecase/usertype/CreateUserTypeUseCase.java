@@ -1,7 +1,7 @@
 package br.com.fiap.gastrohubapi.application.usecase.usertype;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.DuplicateUserTypeNameException;
 

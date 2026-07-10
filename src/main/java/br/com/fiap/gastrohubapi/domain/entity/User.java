@@ -1,5 +1,7 @@
 package br.com.fiap.gastrohubapi.domain.entity;
 
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
+
 import java.util.UUID;
 
 public class User {

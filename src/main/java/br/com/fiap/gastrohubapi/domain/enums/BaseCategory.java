@@ -1,4 +1,4 @@
-package br.com.fiap.gastrohubapi.domain.entity;
+package br.com.fiap.gastrohubapi.domain.enums;
 
 public enum BaseCategory {
     CLIENT,
