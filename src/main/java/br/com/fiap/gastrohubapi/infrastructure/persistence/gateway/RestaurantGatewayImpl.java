@@ -27,7 +27,7 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
 
     @Override
     public List<Restaurant> findByName(String name) {
-        return repository.findByName(name)
+        return repository.findByNameContainingIgnoreCase(name)
                 .stream().map(RestaurantJpaEntity::toDomain).toList();
     }
 

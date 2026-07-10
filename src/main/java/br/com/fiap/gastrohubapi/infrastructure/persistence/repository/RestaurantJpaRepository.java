@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEntity, UUID> {
-    List<RestaurantJpaEntity> findByName(String name);
+    List<RestaurantJpaEntity> findByNameContainingIgnoreCase(String name);
 }

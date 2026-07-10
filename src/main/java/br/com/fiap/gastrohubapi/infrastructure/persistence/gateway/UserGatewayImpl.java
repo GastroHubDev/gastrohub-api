@@ -27,7 +27,7 @@ public class UserGatewayImpl implements UserGateway {
 
     @Override
     public List<User> findByName(String name) {
-        return this.userRepository.findByName(name)
+        return this.userRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(UserJpaEntity::toDomain)
                 .toList();
