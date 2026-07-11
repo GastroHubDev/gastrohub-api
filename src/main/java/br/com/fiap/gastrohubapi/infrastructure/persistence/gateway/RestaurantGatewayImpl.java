@@ -4,6 +4,7 @@ import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
 import br.com.fiap.gastrohubapi.domain.entity.Restaurant;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.RestaurantJpaEntity;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.RestaurantJpaRepository;
+import br.com.fiap.gastrohubapi.infrastructure.util.TextNormalizer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,8 +28,10 @@ public class RestaurantGatewayImpl implements RestaurantGateway {
 
     @Override
     public List<Restaurant> findByName(String name) {
-        return repository.findByNameContainingIgnoreCase(name)
-                .stream().map(RestaurantJpaEntity::toDomain).toList();
+        return repository.findAll().stream()
+                .filter(entity -> TextNormalizer.containsIgnoreCaseAndAccents(entity.getName(), name))
+                .map(RestaurantJpaEntity::toDomain)
+                .toList();
     }
 
     @Override

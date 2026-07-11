@@ -4,6 +4,7 @@ import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserJpaEntity;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.UserJpaRepository;
+import br.com.fiap.gastrohubapi.infrastructure.util.TextNormalizer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public class UserGatewayImpl implements UserGateway {
 
     @Override
     public List<User> findByName(String name) {
-        return this.userRepository.findByNameContainingIgnoreCase(name)
-                .stream()
+        return this.userRepository.findAll().stream()
+                .filter(entity -> TextNormalizer.containsIgnoreCaseAndAccents(entity.getName(), name))
                 .map(UserJpaEntity::toDomain)
                 .toList();
     }
