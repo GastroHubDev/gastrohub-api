@@ -1,6 +1,6 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UserJpaEntityTest {
 
-    private final UserType userType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+    private final UserType userType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
     private final UserTypeJpaEntity userTypeJpaEntity = UserTypeJpaEntity.fromDomain(userType);
 
     @Test

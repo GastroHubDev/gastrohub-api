@@ -1,0 +1,651 @@
+{
+  "info": {
+    "_postman_id": "d6646d91-8122-4992-a44b-ba9662571bfd",
+    "name": "GastroHub API",
+    "description": "FIAP PostTech Tech Challenge Phase 2 — GastroHub API local testing.\n\nOrdem recomendada: UserType → User → Restaurant → MenuItem\n\nOs scripts de Post-response salvam os IDs automaticamente nas variáveis da collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9622092"
+  },
+  "item": [
+    {
+      "name": "UserType",
+      "item": [
+        {
+          "name": "POST Criar UserType",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const id = pm.response.json().id;",
+                  "  pm.collectionVariables.set('userTypeId', id);",
+                  "  console.log('userTypeId salvo:', id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente\",\n  \"baseCategory\": \"CLIENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Criar UserType OWNER",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const id = pm.response.json().id;",
+                  "  pm.collectionVariables.set('userTypeOwnerId', id);",
+                  "  console.log('userTypeOwnerId salvo:', id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Proprietário\",\n  \"baseCategory\": \"OWNER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Listar UserTypes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar UserType por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user-types/{{userTypeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types",
+                "{{userTypeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Atualizar UserType",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente VIP\",\n  \"baseCategory\": \"CLIENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-types/{{userTypeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types",
+                "{{userTypeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Remover UserType",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user-types/{{userTypeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-types",
+                "{{userTypeId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "POST Criar User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const id = pm.response.json().id;",
+                  "  pm.collectionVariables.set('userId', id);",
+                  "  console.log('userId salvo:', id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"senha123\",\n  \"userTypeId\": \"{{userTypeOwnerId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Listar Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar User por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar User por Nome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/search?name=Jo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Jo"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Atualizar User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva Atualizado\",\n  \"email\": \"joao.novo@email.com\",\n  \"password\": \"novaSenha456\",\n  \"userTypeId\": \"{{userTypeOwnerId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Remover User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Restaurant",
+      "item": [
+        {
+          "name": "POST Criar Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const id = pm.response.json().id;",
+                  "  pm.collectionVariables.set('restaurantId', id);",
+                  "  console.log('restaurantId salvo:', id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sabor do Brasil\",\n  \"address\": \"Rua das Flores, 123 - São Paulo/SP\",\n  \"kitchenType\": \"BRAZILIAN\",\n  \"openingHours\": \"Seg-Sex 11h-22h\",\n  \"restaurantOwnerId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/restaurants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Listar Restaurants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar Restaurant por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar Restaurant por Nome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/search?name=Sabor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Sabor"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Atualizar Restaurant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sabor do Brasil Premium\",\n  \"address\": \"Av. Paulista, 1000 - São Paulo/SP\",\n  \"kitchenType\": \"BRAZILIAN\",\n  \"openingHours\": \"Seg-Dom 11h-23h\",\n  \"restaurantOwnerId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Remover Restaurant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MenuItem",
+      "item": [
+        {
+          "name": "POST Criar MenuItem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const id = pm.response.json().id;",
+                  "  pm.collectionVariables.set('menuItemId', id);",
+                  "  console.log('menuItemId salvo:', id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Feijoada Completa\",\n  \"description\": \"Feijoada tradicional com arroz, couve e laranja\",\n  \"price\": 49.90,\n  \"onlyInRestaurant\": true,\n  \"photoPath\": null,\n  \"restaurantId\": \"{{restaurantId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Listar MenuItems",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Buscar MenuItem por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Listar MenuItems por Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/menu-items/restaurant/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items",
+                "restaurant",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Atualizar MenuItem",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Feijoada Completa Especial\",\n  \"description\": \"Feijoada premium com farofa e torresmo\",\n  \"price\": 59.90,\n  \"onlyInRestaurant\": true,\n  \"photoPath\": \"/fotos/feijoada.jpg\",\n  \"restaurantId\": \"{{restaurantId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Remover MenuItem",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "userTypeId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "restaurantId",
+      "value": ""
+    },
+    {
+      "key": "menuItemId",
+      "value": ""
+    },
+    {
+      "key": "userTypeOwnerId",
+      "value": ""
+    }
+  ]
+}
