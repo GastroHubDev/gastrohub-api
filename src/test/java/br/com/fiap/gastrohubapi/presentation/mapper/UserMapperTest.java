@@ -1,6 +1,6 @@
 package br.com.fiap.gastrohubapi.presentation.mapper;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.presentation.dto.response.UserResponse;
@@ -15,6 +15,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class UserMapperTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     private UserMapper userMapper;
 
@@ -43,7 +45,7 @@ class UserMapperTest {
         when(mockUser.getEmail()).thenReturn("Joao@test.com");
         when(mockUser.getUserType()).thenReturn(mockUserType);
 
-        when(mockUserType.getId()).thenReturn(1L);
+        when(mockUserType.getId()).thenReturn(TYPE_ID_1);
         when(mockUserType.getName()).thenReturn("CLIENT");
         when(mockUserType.getBaseCategory()).thenReturn(BaseCategory.CLIENT);
 
@@ -57,7 +59,7 @@ class UserMapperTest {
         assertEquals("Joao@test.com", response.email());
 
         assertNotNull(response.userType());
-        assertEquals(1L, response.userType().id());
+        assertEquals(TYPE_ID_1, response.userType().id());
         assertEquals("CLIENT", response.userType().name());
         assertEquals(BaseCategory.CLIENT, response.userType().baseCategory());
     }

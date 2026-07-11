@@ -4,6 +4,8 @@ import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeInUseException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotFoundException;
 
+import java.util.UUID;
+
 public class DeleteUserTypeUseCase {
 
     private final UserTypeGateway userTypeGateway;
@@ -12,7 +14,7 @@ public class DeleteUserTypeUseCase {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public void execute(Long id) {
+    public void execute(UUID id) {
         userTypeGateway.findById(id)
                 .orElseThrow(() -> new UserTypeNotFoundException("User type not found."));
 

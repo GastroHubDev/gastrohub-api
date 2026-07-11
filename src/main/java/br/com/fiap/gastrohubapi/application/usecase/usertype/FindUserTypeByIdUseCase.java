@@ -4,6 +4,8 @@ import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeNotFoundException;
 
+import java.util.UUID;
+
 public class FindUserTypeByIdUseCase {
 
     private final UserTypeGateway userTypeGateway;
@@ -12,7 +14,7 @@ public class FindUserTypeByIdUseCase {
         this.userTypeGateway = userTypeGateway;
     }
 
-    public UserType execute(Long id) {
+    public UserType execute(UUID id) {
         return userTypeGateway.findById(id)
                 .orElseThrow(() -> new UserTypeNotFoundException("User type not found."));
     }

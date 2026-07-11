@@ -1,5 +1,6 @@
 package br.com.fiap.gastrohubapi.domain.entity;
 
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID TYPE_ID_2 = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
 
     private static final String VALID_NAME = "Joao";
     private static final String VALID_EMAIL = "Joao@test.com";
@@ -18,9 +22,9 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        clientUserType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
+        clientUserType = UserType.restore(TYPE_ID_1, "CLIENT", BaseCategory.CLIENT);
 
-        adminUserType = UserType.restore(2L, "ADMIN", BaseCategory.OWNER);
+        adminUserType = UserType.restore(TYPE_ID_2, "ADMIN", BaseCategory.OWNER);
     }
 
 

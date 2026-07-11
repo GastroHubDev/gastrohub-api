@@ -1,7 +1,8 @@
 package br.com.fiap.gastrohubapi.application.usecase.usertype;
 
+import java.util.UUID;
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.DuplicateUserTypeNameException;
 import br.com.fiap.gastrohubapi.domain.exception.UserTypeInUseException;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateUserTypeUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock
     private UserTypeGateway userTypeGateway;
@@ -37,33 +40,33 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldUpdateUserType() {
-        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
-        UserType savedUserType = UserType.restore(1L, "Owner", BaseCategory.OWNER);
+        UserType existingUserType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
+        UserType savedUserType = UserType.restore(TYPE_ID_1, "Owner", BaseCategory.OWNER);
 
-        when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
-        when(userTypeGateway.existsByNameAndIdNot("Owner", 1L)).thenReturn(false);
-        when(userTypeGateway.isInUse(1L)).thenReturn(false);
+        when(userTypeGateway.findById(TYPE_ID_1)).thenReturn(Optional.of(existingUserType));
+        when(userTypeGateway.existsByNameAndIdNot("Owner", TYPE_ID_1)).thenReturn(false);
+        when(userTypeGateway.isInUse(TYPE_ID_1)).thenReturn(false);
         when(userTypeGateway.save(any(UserType.class))).thenReturn(savedUserType);
 
-        UserType result = useCase.execute(1L, "Owner", BaseCategory.OWNER);
+        UserType result = useCase.execute(TYPE_ID_1, "Owner", BaseCategory.OWNER);
 
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(TYPE_ID_1);
         assertThat(result.getName()).isEqualTo("Owner");
         assertThat(result.getBaseCategory()).isEqualTo(BaseCategory.OWNER);
 
         ArgumentCaptor<UserType> captor = ArgumentCaptor.forClass(UserType.class);
         verify(userTypeGateway).save(captor.capture());
 
-        assertThat(captor.getValue().getId()).isEqualTo(1L);
+        assertThat(captor.getValue().getId()).isEqualTo(TYPE_ID_1);
         assertThat(captor.getValue().getName()).isEqualTo("Owner");
         assertThat(captor.getValue().getBaseCategory()).isEqualTo(BaseCategory.OWNER);
     }
 
     @Test
     void shouldThrowWhenUserTypeIsNotFound() {
-        when(userTypeGateway.findById(1L)).thenReturn(Optional.empty());
+        when(userTypeGateway.findById(TYPE_ID_1)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> useCase.execute(1L, "Owner", BaseCategory.OWNER))
+        assertThatThrownBy(() -> useCase.execute(TYPE_ID_1, "Owner", BaseCategory.OWNER))
                 .isInstanceOf(UserTypeNotFoundException.class)
                 .hasMessage("User type not found.");
 
@@ -72,12 +75,12 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldThrowWhenNameAlreadyExistsForAnotherUserType() {
-        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+        UserType existingUserType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
 
-        when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
-        when(userTypeGateway.existsByNameAndIdNot("Owner", 1L)).thenReturn(true);
+        when(userTypeGateway.findById(TYPE_ID_1)).thenReturn(Optional.of(existingUserType));
+        when(userTypeGateway.existsByNameAndIdNot("Owner", TYPE_ID_1)).thenReturn(true);
 
-        assertThatThrownBy(() -> useCase.execute(1L, "Owner", BaseCategory.CLIENT))
+        assertThatThrownBy(() -> useCase.execute(TYPE_ID_1, "Owner", BaseCategory.CLIENT))
                 .isInstanceOf(DuplicateUserTypeNameException.class)
                 .hasMessage("User type name already exists.");
 
@@ -86,13 +89,13 @@ class UpdateUserTypeUseCaseTest {
 
     @Test
     void shouldThrowWhenChangingBaseCategoryAndUserTypeIsInUse() {
-        UserType existingUserType = UserType.restore(1L, "Client", BaseCategory.CLIENT);
+        UserType existingUserType = UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT);
 
-        when(userTypeGateway.findById(1L)).thenReturn(Optional.of(existingUserType));
-        when(userTypeGateway.existsByNameAndIdNot("Client", 1L)).thenReturn(false);
-        when(userTypeGateway.isInUse(1L)).thenReturn(true);
+        when(userTypeGateway.findById(TYPE_ID_1)).thenReturn(Optional.of(existingUserType));
+        when(userTypeGateway.existsByNameAndIdNot("Client", TYPE_ID_1)).thenReturn(false);
+        when(userTypeGateway.isInUse(TYPE_ID_1)).thenReturn(true);
 
-        assertThatThrownBy(() -> useCase.execute(1L, "Client", BaseCategory.OWNER))
+        assertThatThrownBy(() -> useCase.execute(TYPE_ID_1, "Client", BaseCategory.OWNER))
                 .isInstanceOf(UserTypeInUseException.class)
                 .hasMessage("Cannot change base category because user type is in use.");
 

@@ -1,7 +1,8 @@
 package br.com.fiap.gastrohubapi.application.usecase.usertype;
 
+import java.util.UUID;
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ListUserTypesUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID TYPE_ID_2 = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
 
     @Mock
     private UserTypeGateway userTypeGateway;
@@ -30,8 +34,8 @@ class ListUserTypesUseCaseTest {
     @Test
     void shouldListUserTypes() {
         List<UserType> userTypes = List.of(
-                UserType.restore(1L, "Client", BaseCategory.CLIENT),
-                UserType.restore(2L, "Owner", BaseCategory.OWNER)
+                UserType.restore(TYPE_ID_1, "Client", BaseCategory.CLIENT),
+                UserType.restore(TYPE_ID_2, "Owner", BaseCategory.OWNER)
         );
 
         when(userTypeGateway.findAll()).thenReturn(userTypes);

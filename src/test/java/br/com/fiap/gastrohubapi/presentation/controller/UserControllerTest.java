@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.UUID;
 
-import static br.com.fiap.gastrohubapi.domain.entity.BaseCategory.CLIENT;
+import static br.com.fiap.gastrohubapi.domain.enums.BaseCategory.CLIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +29,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock private CreateUserUseCase createUserUseCase;
     @Mock private FindUserByIdUseCase findUserByIdUseCase;
@@ -42,7 +44,7 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
-    private static final Long USER_TYPE_ID = 1L;
+    private static final UUID USER_TYPE_ID = TYPE_ID_1;
 
     private UUID userId;
     private User mockUser;
@@ -54,7 +56,7 @@ class UserControllerTest {
 
         mockUser = mock(User.class);
 
-        mockUserResponse = new UserResponse(userId, "Joao", "Joao@test.com", new UserTypeResponse(1L, "CLIENT", CLIENT));
+        mockUserResponse = new UserResponse(userId, "Joao", "Joao@test.com", new UserTypeResponse(TYPE_ID_1, "CLIENT", CLIENT));
     }
 
     @Test

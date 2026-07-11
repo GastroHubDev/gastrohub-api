@@ -1,9 +1,12 @@
 package br.com.fiap.gastrohubapi.domain.entity;
 
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.exception.InvalidUserTypeException;
 
+import java.util.UUID;
+
 public class UserType {
-    private Long id;
+    private UUID id;
     private String name;
     private BaseCategory baseCategory;
 
@@ -17,7 +20,7 @@ public class UserType {
         return userType;
     }
 
-    public static UserType restore(Long id, String name, BaseCategory baseCategory) {
+    public static UserType restore(UUID id, String name, BaseCategory baseCategory) {
         UserType userType = new UserType();
         userType.setId(id);
         userType.setName(name);
@@ -26,7 +29,7 @@ public class UserType {
         return userType;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -55,7 +58,7 @@ public class UserType {
         }
     }
 
-    private void setId(Long id) {
+    private void setId(UUID id) {
         this.id = id;
     }
 

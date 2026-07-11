@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GastroHub — Relatório Técnico: Fase 2</title>
+<style>
+  :root {
+    --navy: #0e1a2b;
+    --navy-soft: #1c2a3d;
+    --red: #e5344a;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --paper: #ffffff;
+    --stripe: #f6f7f9;
+    --code-bg: #1c2739;
+    --code-ink: #e6edf7;
+    --chip-bg: #eceef8;
+    --chip-ink: #3b4a6b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #ffffff;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 48px 56px;
+  }
+
+  /* ---------- Capa ---------- */
+  .cover {
+    background: var(--navy);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+  }
+  .cover .badge {
+    background: var(--red);
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 3px;
+    padding: 8px 22px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .cover h1 {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 560px;
+  }
+  .cover .subtitle {
+    color: #9fb0c7;
+    font-size: 19px;
+    margin-top: 18px;
+  }
+  .cover .institution {
+    color: #6e8098;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+  .cover .divider {
+    width: 56px;
+    height: 4px;
+    background: var(--red);
+    border-radius: 2px;
+    margin: 42px 0;
+  }
+  .cover .students {
+    background: var(--navy-soft);
+    border-radius: 14px;
+    padding: 30px 44px;
+    text-align: left;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  }
+  .cover .students p { margin: 4px 0; color: #c7d2e2; font-size: 15px; }
+  .cover .students b { color: #ffffff; }
+
+  /* ---------- Sumário ---------- */
+  h2.summary-title, h2.section-title {
+    font-size: 28px;
+    color: var(--navy);
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--red);
+    margin: 48px 0 24px 0;
+  }
+  ol.summary { margin-left: 28px; }
+  ol.summary li { padding: 5px 0; color: var(--ink); font-size: 16px; }
+
+  /* ---------- Blocos de seção ---------- */
+  h3.block {
+    font-size: 18px;
+    color: var(--navy);
+    border-left: 4px solid var(--red);
+    padding-left: 12px;
+    margin: 30px 0 12px 0;
+  }
+  h4 { font-size: 15px; color: var(--navy); margin: 22px 0 8px 0; }
+
+  p { margin: 10px 0; }
+  ul, ol { margin: 10px 0 10px 28px; }
+  li { padding: 3px 0; }
+
+  code {
+    background: var(--chip-bg);
+    color: var(--chip-ink);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 12px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  pre code { background: transparent; color: inherit; padding: 0; font-size: 13px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  thead th {
+    background: var(--navy);
+    color: #ffffff;
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+  }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #e9ecf0;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: var(--stripe); }
+
+  .method {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .m-post   { background: #1565c0; }
+  .m-get    { background: #2e7d32; }
+  .m-put    { background: #e65100; }
+  .m-delete { background: #c62828; }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .callout.info    { background: #fff8e1; border-left: 4px solid #f6b93b; }
+  .callout.success { background: #e8f5e9; border-left: 4px solid #43a047; }
+
+  .pending {
+    border: 2px dashed #c3cad4;
+    border-radius: 12px;
+    background: #fafbfc;
+    color: var(--muted);
+    padding: 28px 24px;
+    text-align: center;
+    font-size: 14px;
+    margin: 18px 0;
+  }
+  .pending b { color: #8a94a3; letter-spacing: 1px; }
+
+  .endpoint-card {
+    border: 1px solid #e5e8ec;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 22px 0;
+  }
+  .endpoint-card .title {
+    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 15px;
+    margin-left: 10px;
+  }
+  .endpoint-card h5 { font-size: 14px; color: var(--ink); margin: 18px 0 6px 0; }
+
+  /* ---------- Impressão ---------- */
+  @media print {
+    body { font-size: 12px; }
+    .page { max-width: 100%; padding: 24px 10mm; }
+    .cover { min-height: 96vh; page-break-after: always; }
+    .summary-page { page-break-after: always; }
+    h2.section-title { page-break-after: avoid; margin-top: 30px; }
+    h3.block, h4 { page-break-after: avoid; }
+    pre, table, .endpoint-card, .callout, .pending { page-break-inside: avoid; }
+    pre { font-size: 10.5px; overflow-x: hidden; }
+    pre code { font-size: 10.5px; }
+    section.topic { page-break-before: always; }
+    section.topic:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="cover">
+  <div class="badge">Projeto: GastroHub</div>
+  <h1>Sistema de Gestão<br>para Restaurantes</h1>
+  <div class="subtitle">Relatório Técnico: Fase 2</div>
+  <div class="institution">FIAP — Pós Tech · Arquitetura e Desenvolvimento Java</div>
+  <div class="divider"></div>
+  <div class="students">
+    <p><b>Aluno:</b> Geovanne de Souza Paes</p>
+    <p><b>RM:</b> 372009</p>
+    <p><b>Aluno:</b> Rafael Teles Espindola</p>
+    <p><b>RM:</b> 370772</p>
+    <p><b>Aluno:</b> Victor Silva Mazzola</p>
+    <p><b>RM:</b> 370764</p>
+    <p><b>Aluno:</b> Gideão Lucas de Souza Silva</p>
+    <p><b>RM:</b> 374230</p>
+    <p><b>Aluno:</b> Luis Filipi Santos Souza</p>
+    <p><b>RM:</b> 372233</p>
+  </div>
+</div>
+
+<!-- ==================== SUMÁRIO ==================== -->
+<div class="page summary-page">
+  <h2 class="summary-title">Sumário</h2>
+  <ol class="summary">
+    <li>Introdução</li>
+    <li>Arquitetura do sistema</li>
+    <li>Modelagem das entidades e Banco de dados</li>
+    <li>Descrição dos endpoints da API</li>
+    <li>Tratamento de erros</li>
+    <li>Documentação Swagger / OpenAPI</li>
+    <li>Configuração do Docker</li>
+    <li>Qualidade do código</li>
+    <li>Testes automatizados</li>
+    <li>Collection Postman</li>
+    <li>Repositório do código</li>
+    <li>Guia passo a passo para testar o projeto</li>
+    <li>Observações e Limitações conhecidas</li>
+  </ol>
+</div>
+
+<div class="page">
+
+<!-- ==================== 1. INTRODUÇÃO ==================== -->
+<section class="topic">
+  <h2 class="section-title">1. Introdução</h2>
+
+  <h3 class="block">Descrição do Problema</h3>
+  <p>Na região, um grupo de restaurantes decidiu contratar estudantes para construir um
+  sistema de gestão compartilhado para seus estabelecimentos. A decisão foi motivada
+  pelo alto custo de sistemas individuais, levando os restaurantes a se unirem em torno
+  de uma solução única. Esse sistema permitirá que os clientes escolham restaurantes
+  com base na comida oferecida, em vez de se basearem na qualidade do sistema de
+  gestão.</p>
+
+  <h3 class="block">Objetivo do projeto</h3>
+  <p>O objetivo do projeto é construir o backend do sistema de gestão compartilhado em
+  <b>Spring Boot</b>, contemplando a gestão de tipos de usuários, o cadastro de usuários,
+  o cadastro de restaurantes e o cadastro dos itens do cardápio. Além das funcionalidades,
+  o projeto prioriza práticas de desenvolvimento e estruturação de código limpo: foi
+  organizado em <b>Clean Architecture</b>, com separação clara entre domínio, casos de uso,
+  infraestrutura e apresentação, suporte a documentação via Swagger e testes
+  automatizados.</p>
+
+  <p>Nesta fase, o sistema cobre:</p>
+  <ul>
+    <li>CRUD de <b>tipos de usuário</b> (<code>UserType</code>), com categorias base <code>CLIENT</code> e <code>OWNER</code></li>
+    <li>Associação de usuários a um tipo de usuário</li>
+    <li>CRUD de <b>usuários</b>, com garantia de unicidade de e-mail</li>
+    <li>CRUD de <b>restaurantes</b> (nome, endereço, tipo de cozinha, horário de funcionamento e dono)</li>
+    <li>Validação de que o dono do restaurante é um usuário existente e não é da categoria <code>CLIENT</code></li>
+    <li>CRUD de <b>itens do cardápio</b> (nome, descrição, preço, disponibilidade apenas no local e caminho da foto)</li>
+    <li>Validação de que o item do cardápio pertence a um restaurante existente</li>
+    <li>Estruturação do código em <b>Clean Architecture</b></li>
+    <li>Documentação via Swagger/OpenAPI</li>
+    <li>Testes automatizados com JUnit 5, Mockito e MockMvc</li>
+  </ul>
+</section>
+
+<!-- ==================== 2. ARQUITETURA ==================== -->
+<section class="topic">
+  <h2 class="section-title">2. Arquitetura do sistema</h2>
+
+  <h3 class="block">Descrição da Arquitetura</h3>
+  <p>O projeto segue os princípios da <b>Clean Architecture</b>, organizado em quatro camadas:
+  <b>domain</b>, <b>application</b>, <b>infrastructure</b> e <b>presentation</b>. As regras de negócio ficam
+  isoladas no domínio e nos casos de uso, que dependem apenas de contratos (interfaces de
+  <i>gateway</i>) — nunca de detalhes de banco de dados ou framework. A comunicação com o
+  banco é feita via <b>Spring Data JPA / Hibernate</b> na camada de infraestrutura, que
+  implementa esses contratos.</p>
+
+  <h4>Estrutura de Pacotes</h4>
+<pre><code>br.com.fiap.gastrohubapi
+├── domain/                  ← Núcleo do negócio (sem dependência de framework)
+│   ├── entity/              ← User, UserType, Restaurant, MenuItem
+│   ├── enums/               ← Enumerações: BaseCategory, KitchenType
+│   └── exception/           ← Exceções de negócio (ex.: UserTypeInUseException)
+├── application/             ← Regras de aplicação
+│   ├── gateway/             ← Contratos de persistência (interfaces)
+│   └── usecase/             ← user, usertype, restaurant, menuitem
+├── infrastructure/          ← Detalhes técnicos
+│   ├── config/              ← Registro dos use cases como beans Spring
+│   └── persistence/
+│       ├── entity/          ← Entidades JPA mapeadas para o banco
+│       ├── repository/      ← Repositórios Spring Data JPA
+│       └── gateway/         ← Implementações dos gateways (adapters)
+└── presentation/            ← Camada HTTP
+    ├── controller/          ← REST Controllers com documentação Swagger
+    ├── dto/                 ← Request e Response records
+    ├── mapper/              ← Conversão domínio ⇄ DTO
+    └── exceptionhandler/    ← Handlers globais de erros</code></pre>
+
+  <h4>Fluxo de Dependências</h4>
+<pre><code>Presentation ──► Application ──► Domain
+Infrastructure ──► Application (implementa os gateways)</code></pre>
+  <p>A camada de aplicação depende de interfaces de gateway, e não diretamente de
+  implementações de banco. A infraestrutura implementa esses contratos usando JPA,
+  permitindo trocar o mecanismo de persistência sem alterar as regras de negócio.</p>
+
+  <h3 class="block">Diagrama da Arquitetura</h3>
+<pre><code>┌──────────────────────────────────────────────────────────┐
+│                    Cliente HTTP                          │
+│              (Postman / Swagger UI / App)                │
+└───────────────────────────┬──────────────────────────────┘
+                            │ JSON / REST
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│  PRESENTATION                                            │
+│  Controllers (@RestController): validam a entrada        │
+│  (@Valid), convertem DTOs via Mappers e delegam          │
+│  aos casos de uso                                        │
+└───────────────────────────┬──────────────────────────────┘
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│  APPLICATION                                             │
+│  Use Cases: aplicam regras de negócio (unicidade,        │
+│  existência do dono, restaurante do item etc.) e         │
+│  orquestram o domínio através dos Gateways (interfaces)  │
+└───────────────────────────┬──────────────────────────────┘
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│  DOMAIN                                                  │
+│  Entidades com factory methods (create/restore) e        │
+│  autovalidação; enums e exceções de negócio              │
+└───────────────────────────┬──────────────────────────────┘
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│  INFRASTRUCTURE                                          │
+│  GatewayImpl → Spring Data JPA Repository → Hibernate    │
+│  Tabelas: tb_users, user_type, restaurant, menu_items    │
+└──────────────────────────────────────────────────────────┘</code></pre>
+
+  <h3 class="block">Tecnologias Utilizadas</h3>
+  <table>
+    <thead><tr><th>Camada / Função</th><th>Tecnologia</th></tr></thead>
+    <tbody>
+      <tr><td>Linguagem</td><td>Java 21</td></tr>
+      <tr><td>Framework principal</td><td>Spring Boot 3.5.15</td></tr>
+      <tr><td>API REST</td><td>Spring Web MVC</td></tr>
+      <tr><td>Banco de dados (produção)</td><td>MySQL 8.4 (container Docker)</td></tr>
+      <tr><td>Banco de dados (desenvolvimento local e testes)</td><td>H2 in-memory</td></tr>
+      <tr><td>Driver de banco</td><td>MySQL Connector/J</td></tr>
+      <tr><td>ORM</td><td>Spring Data JPA / Hibernate</td></tr>
+      <tr><td>Validação</td><td>Bean Validation (Jakarta)</td></tr>
+      <tr><td>Documentação</td><td>SpringDoc OpenAPI 2.8.16 (Swagger UI)</td></tr>
+      <tr><td>Containerização</td><td>Docker + Docker Compose</td></tr>
+      <tr><td>Build</td><td>Maven (com Maven Wrapper)</td></tr>
+      <tr><td>Testes</td><td>JUnit 5 + Mockito + MockMvc</td></tr>
+      <tr><td>Utilitários</td><td>Lombok, Spring Boot DevTools</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ==================== 3. MODELAGEM ==================== -->
+<section class="topic">
+  <h2 class="section-title">3. Modelagem das entidades e Banco de dados</h2>
+
+  <h3 class="block">Diagrama de Classes — Entidades de Domínio</h3>
+  <p>O sistema possui quatro entidades de domínio: <code>User</code>, <code>UserType</code>,
+  <code>Restaurant</code> e <code>MenuItem</code>. As entidades são criadas por meio de
+  <i>factory methods</i> (<code>create</code>/<code>restore</code>) que executam as validações de
+  negócio, garantindo que nenhuma instância exista em estado inválido.</p>
+
+<pre><code>┌─────────────────────────┐        ┌──────────────────────────┐
+│ «Entity» User           │  tipo  │ «Entity» UserType        │
+│─────────────────────────│ ─────► │──────────────────────────│
+│ +UUID id                │  N..1  │ +UUID id                 │
+│ +String name            │        │ +String name             │
+│ +String email           │        │ +BaseCategory baseCategory│
+│ +String password        │        └────────────┬─────────────┘
+│ +UserType userType      │                     │
+│─────────────────────────│                     ▼
+│ +create() / +restore()  │        ┌──────────────────────────┐
+│ +update()               │        │ «Enum» BaseCategory      │
+│ +isClient()             │        │ CLIENT | OWNER           │
+└───────────┬─────────────┘        └──────────────────────────┘
+            │ restaurantOwnerId (dono)
+            ▼ 1..N
+┌─────────────────────────┐        ┌──────────────────────────┐
+│ «Entity» Restaurant     │        │ «Enum» KitchenType       │
+│─────────────────────────│ ─────► │ ITALIAN | JAPANESE       │
+│ +UUID id                │        │ BRAZILIAN | MEXICAN      │
+│ +String name            │        │ INDIAN                   │
+│ +String address         │        └──────────────────────────┘
+│ +KitchenType kitchenType│
+│ +String openingHours    │
+│ +UUID restaurantOwnerId │
+│─────────────────────────│
+│ +create() / +restore()  │
+│ +update()               │
+└───────────┬─────────────┘
+            │ restaurantId
+            ▼ 1..N
+┌─────────────────────────┐
+│ «Entity» MenuItem       │
+│─────────────────────────│
+│ +UUID id                │
+│ +String name            │
+│ +String description     │
+│ +BigDecimal price       │
+│ +boolean onlyInRestaurant│
+│ +String photoPath       │
+│ +UUID restaurantId      │
+│─────────────────────────│
+│ +create() / +restore()  │
+└─────────────────────────┘</code></pre>
+
+  <h3 class="block">Estrutura do Banco de Dados (MER)</h3>
+  <p>O mapeamento objeto-relacional é feito por entidades JPA dedicadas
+  (<code>UserJpaEntity</code>, <code>UserTypeJpaEntity</code>, <code>RestaurantJpaEntity</code>,
+  <code>MenuItemJpaEntity</code>), mantendo o domínio livre de anotações de persistência.
+  O schema é gerado pelo Hibernate (<code>ddl-auto=update</code>).</p>
+
+  <h4>Tabela: user_type</h4>
+  <table>
+    <thead><tr><th>Coluna</th><th>Tipo</th><th>Restrições / Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>UUID</td><td>PK, gerado pelo JPA (<code>GenerationType.UUID</code>)</td></tr>
+      <tr><td><code>name</code></td><td>VARCHAR</td><td>NOT NULL, UNIQUE: nome do tipo de usuário</td></tr>
+      <tr><td><code>base_category</code></td><td>VARCHAR</td><td>NOT NULL: <code>CLIENT</code> ou <code>OWNER</code> (enum como string)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Tabela: tb_users</h4>
+  <table>
+    <thead><tr><th>Coluna</th><th>Tipo</th><th>Restrições / Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>UUID</td><td>PK — gerado pelo domínio (não pelo banco)</td></tr>
+      <tr><td><code>name</code></td><td>VARCHAR</td><td>NOT NULL: nome completo do usuário</td></tr>
+      <tr><td><code>email</code></td><td>VARCHAR</td><td>NOT NULL, UNIQUE: endereço de e-mail</td></tr>
+      <tr><td><code>password</code></td><td>VARCHAR</td><td>NOT NULL: senha do usuário</td></tr>
+      <tr><td><code>user_type_id</code></td><td>UUID</td><td>NOT NULL, FK → <code>user_type.id</code> (<code>@ManyToOne</code> LAZY)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Tabela: restaurant</h4>
+  <table>
+    <thead><tr><th>Coluna</th><th>Tipo</th><th>Restrições / Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>UUID</td><td>PK, gerado pelo JPA (<code>GenerationType.UUID</code>)</td></tr>
+      <tr><td><code>name</code></td><td>VARCHAR</td><td>NOT NULL: nome do restaurante</td></tr>
+      <tr><td><code>address</code></td><td>VARCHAR</td><td>NOT NULL: endereço</td></tr>
+      <tr><td><code>kitchen_type</code></td><td>VARCHAR</td><td>NOT NULL: tipo de cozinha (enum como string)</td></tr>
+      <tr><td><code>opening_hours</code></td><td>VARCHAR</td><td>NOT NULL: horário de funcionamento</td></tr>
+      <tr><td><code>restaurant_owner_id</code></td><td>UUID</td><td>NOT NULL: referência ao usuário dono (validada no caso de uso)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Tabela: menu_items</h4>
+  <table>
+    <thead><tr><th>Coluna</th><th>Tipo</th><th>Restrições / Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>UUID</td><td>PK, gerado pelo JPA (<code>GenerationType.UUID</code>)</td></tr>
+      <tr><td><code>name</code></td><td>VARCHAR</td><td>NOT NULL: nome do item</td></tr>
+      <tr><td><code>description</code></td><td>TEXT</td><td>NOT NULL: descrição do prato</td></tr>
+      <tr><td><code>price</code></td><td>DECIMAL(10,2)</td><td>NOT NULL: preço (maior que zero)</td></tr>
+      <tr><td><code>only_in_restaurant</code></td><td>BOOLEAN</td><td>NOT NULL: disponível apenas para consumo no local</td></tr>
+      <tr><td><code>photo_path</code></td><td>VARCHAR</td><td>Caminho de armazenamento da foto do prato (opcional)</td></tr>
+      <tr><td><code>restaurant_id</code></td><td>UUID</td><td>NOT NULL: referência ao restaurante (validada no caso de uso)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Enums do domínio</h4>
+<pre><code>public enum BaseCategory {      public enum KitchenType {
+    CLIENT,                         ITALIAN,
+    OWNER                           JAPANESE,
+}                                   BRAZILIAN,
+                                    MEXICAN,
+                                    INDIAN
+                                }</code></pre>
+
+  <div class="callout info">
+    <b>Associação usuário ⇄ tipo de usuário:</b> conforme solicitado no desafio, o usuário é
+    associado ao tipo de usuário via chave estrangeira <code>user_type_id</code>. Um tipo de
+    usuário em uso não pode ser excluído (regra <code>UserTypeInUseException</code>).
+  </div>
+
+  <h3 class="block">Banco de dados definitivo (produção)</h3>
+  <p>O banco de dados definitivo do projeto é o <b>MySQL 8.4</b>, executado em <b>container
+  Docker</b> definido no <code>docker-compose.yml</code> na raiz do repositório (serviço
+  <code>mysql</code>, imagem oficial <code>mysql:8.4</code>):</p>
+
+<pre><code>services:
+  mysql:
+    image: mysql:8.4
+    container_name: gastrohub-mysql
+    environment:
+      MYSQL_DATABASE: gastrohub
+      MYSQL_USER: gastrohub
+      MYSQL_PASSWORD: gastrohub
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d:ro,z
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]</code></pre>
+
+  <p>Características da configuração:</p>
+  <ul>
+    <li><b>Banco:</b> <code>gastrohub</code>, exposto na porta <code>3306</code>, com usuário
+    dedicado <code>gastrohub</code>.</li>
+    <li><b>Persistência:</b> os dados são gravados no volume Docker <code>mysql_data</code>,
+    preservados entre reinicializações do container.</li>
+    <li><b>Carga automática:</b> os scripts <code>sql/01-schema.sql</code> (DDL das tabelas)
+    e <code>sql/02-seed.sql</code> (dados de exemplo) são executados automaticamente pelo
+    container na primeira inicialização, via <code>/docker-entrypoint-initdb.d</code>.</li>
+    <li><b>Healthcheck:</b> o serviço da API só sobe após o MySQL responder ao
+    <code>mysqladmin ping</code> (condição <code>service_healthy</code>).</li>
+  </ul>
+
+  <p>No desenvolvimento local e nos testes automatizados, a aplicação utiliza
+  <b>H2 in-memory</b>, dispensando qualquer instalação de banco. O driver
+  <b>MySQL Connector/J</b> está declarado no <code>pom.xml</code>. A configuração completa
+  do Docker é detalhada na seção 7.</p>
+</section>
+
+<!-- ==================== 4. ENDPOINTS ==================== -->
+<section class="topic">
+  <h2 class="section-title">4. Descrição dos endpoints da API</h2>
+
+  <p>Base URL: <code>http://localhost:8080</code>. A API expõe quatro módulos:
+  <b>Tipos de Usuário</b>, <b>Usuários</b>, <b>Restaurantes</b> e <b>Itens do Cardápio</b>,
+  totalizando 24 endpoints.</p>
+
+  <h3 class="block">Tipos de Usuário — <code>/user-types</code></h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>/user-types</code></td><td><span class="method m-post">POST</span></td><td>Cria um tipo de usuário</td></tr>
+      <tr><td><code>/user-types</code></td><td><span class="method m-get">GET</span></td><td>Lista todos os tipos de usuário</td></tr>
+      <tr><td><code>/user-types/{id}</code></td><td><span class="method m-get">GET</span></td><td>Busca um tipo de usuário pelo ID</td></tr>
+      <tr><td><code>/user-types/{id}</code></td><td><span class="method m-put">PUT</span></td><td>Atualiza um tipo de usuário</td></tr>
+      <tr><td><code>/user-types/{id}</code></td><td><span class="method m-delete">DELETE</span></td><td>Exclui um tipo de usuário (se não estiver em uso)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Usuários — <code>/users</code></h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>/users</code></td><td><span class="method m-post">POST</span></td><td>Cria um usuário (e-mail deve ser único)</td></tr>
+      <tr><td><code>/users</code></td><td><span class="method m-get">GET</span></td><td>Lista todos os usuários</td></tr>
+      <tr><td><code>/users/{id}</code></td><td><span class="method m-get">GET</span></td><td>Busca um usuário pelo ID</td></tr>
+      <tr><td><code>/users/search?name=X</code></td><td><span class="method m-get">GET</span></td><td>Busca usuários pelo nome</td></tr>
+      <tr><td><code>/users/email/{email}</code></td><td><span class="method m-get">GET</span></td><td>Busca um usuário pelo e-mail</td></tr>
+      <tr><td><code>/users/{id}</code></td><td><span class="method m-put">PUT</span></td><td>Atualiza os dados de um usuário</td></tr>
+      <tr><td><code>/users/{id}</code></td><td><span class="method m-delete">DELETE</span></td><td>Exclui um usuário pelo ID</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Restaurantes — <code>/restaurants</code></h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>/restaurants</code></td><td><span class="method m-post">POST</span></td><td>Cria um restaurante (dono deve existir e não ser <code>CLIENT</code>)</td></tr>
+      <tr><td><code>/restaurants</code></td><td><span class="method m-get">GET</span></td><td>Lista todos os restaurantes</td></tr>
+      <tr><td><code>/restaurants/{id}</code></td><td><span class="method m-get">GET</span></td><td>Busca um restaurante pelo ID</td></tr>
+      <tr><td><code>/restaurants/search?name=X</code></td><td><span class="method m-get">GET</span></td><td>Busca restaurantes pelo nome</td></tr>
+      <tr><td><code>/restaurants/{id}</code></td><td><span class="method m-put">PUT</span></td><td>Atualiza um restaurante</td></tr>
+      <tr><td><code>/restaurants/{id}</code></td><td><span class="method m-delete">DELETE</span></td><td>Exclui um restaurante pelo ID</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Itens do Cardápio — <code>/menu-items</code></h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Método</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>/menu-items</code></td><td><span class="method m-post">POST</span></td><td>Cria um item do cardápio (restaurante deve existir)</td></tr>
+      <tr><td><code>/menu-items</code></td><td><span class="method m-get">GET</span></td><td>Lista todos os itens do cardápio</td></tr>
+      <tr><td><code>/menu-items/{id}</code></td><td><span class="method m-get">GET</span></td><td>Busca um item pelo ID</td></tr>
+      <tr><td><code>/menu-items/restaurant/{restaurantId}</code></td><td><span class="method m-get">GET</span></td><td>Lista os itens de um restaurante</td></tr>
+      <tr><td><code>/menu-items/{id}</code></td><td><span class="method m-put">PUT</span></td><td>Atualiza um item do cardápio</td></tr>
+      <tr><td><code>/menu-items/{id}</code></td><td><span class="method m-delete">DELETE</span></td><td>Exclui um item pelo ID</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Exemplos de Requisição e Resposta</h3>
+
+  <div class="endpoint-card">
+    <span class="method m-post">POST</span><span class="title">/user-types: Criar Tipo de Usuário</span>
+    <h5>Requisição</h5>
+<pre><code>{
+  "name": "Cliente",
+  "baseCategory": "CLIENT"
+}</code></pre>
+    <h5>Resposta 201: Criado com sucesso</h5>
+<pre><code>{
+  "id": "8d4f0a2e-6b1c-4c9a-9e2f-5a7b3c1d0e9f",
+  "name": "Cliente",
+  "baseCategory": "CLIENT"
+}</code></pre>
+    <h5>Resposta 409: Nome de tipo já cadastrado</h5>
+<pre><code>{
+  "timestamp": "2026-07-02T14:00:00Z",
+  "status": 409,
+  "error": "Conflict",
+  "message": "User type name already exists."
+}</code></pre>
+  </div>
+
+  <div class="endpoint-card">
+    <span class="method m-post">POST</span><span class="title">/users: Criar Usuário</span>
+    <h5>Requisição</h5>
+<pre><code>{
+  "name": "Roberto Rodriguez",
+  "email": "roberto.rodriguez@email.com",
+  "password": "password123",
+  "userTypeId": "8d4f0a2e-6b1c-4c9a-9e2f-5a7b3c1d0e9f"
+}</code></pre>
+    <h5>Resposta 201: Criado com sucesso (senha nunca é retornada)</h5>
+<pre><code>{
+  "id": "3f2b9c1e-8a4d-4e2f-9b6a-1c5d7e8f9a0b",
+  "name": "Roberto Rodriguez",
+  "email": "roberto.rodriguez@email.com",
+  "userType": {
+    "id": "8d4f0a2e-6b1c-4c9a-9e2f-5a7b3c1d0e9f",
+    "name": "Cliente",
+    "baseCategory": "CLIENT"
+  }
+}</code></pre>
+  </div>
+
+  <div class="endpoint-card">
+    <span class="method m-post">POST</span><span class="title">/restaurants: Criar Restaurante</span>
+    <h5>Requisição</h5>
+<pre><code>{
+  "name": "Cantina da Nonna",
+  "address": "Av. Paulista, 1000 - São Paulo/SP",
+  "kitchenType": "ITALIAN",
+  "openingHours": "Seg a Dom, das 11h às 23h",
+  "restaurantOwnerId": "7a1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e"
+}</code></pre>
+    <h5>Resposta 201: Criado com sucesso</h5>
+<pre><code>{
+  "id": "9b8a7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d",
+  "name": "Cantina da Nonna",
+  "address": "Av. Paulista, 1000 - São Paulo/SP",
+  "kitchenType": "ITALIAN",
+  "openingHours": "Seg a Dom, das 11h às 23h",
+  "restaurantOwnerId": "7a1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e"
+}</code></pre>
+    <h5>Resposta 400: Dono com categoria CLIENT</h5>
+<pre><code>{
+  "timestamp": "2026-07-02T14:05:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "The restaurantOwnerId cannot be a CLIENT BaseCategory User"
+}</code></pre>
+    <h5>Resposta 409: Restaurante duplicado (mesmo nome, dono, endereço e cozinha)</h5>
+<pre><code>{
+  "timestamp": "2026-07-02T14:06:00Z",
+  "status": 409,
+  "error": "Conflict",
+  "message": "Another restaurant already exists with the same name, owner, address and kitchentype"
+}</code></pre>
+  </div>
+
+  <div class="endpoint-card">
+    <span class="method m-post">POST</span><span class="title">/menu-items: Criar Item do Cardápio</span>
+    <h5>Requisição</h5>
+<pre><code>{
+  "name": "Lasanha à Bolonhesa",
+  "description": "Massa fresca com molho bolonhesa e queijo gratinado",
+  "price": 59.90,
+  "onlyInRestaurant": false,
+  "photoPath": "/images/pratos/lasanha-bolonhesa.png",
+  "restaurantId": "9b8a7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
+}</code></pre>
+    <h5>Resposta 201: Criado com sucesso</h5>
+<pre><code>{
+  "id": "5c4d3e2f-1a0b-9c8d-7e6f-5a4b3c2d1e0f",
+  "name": "Lasanha à Bolonhesa",
+  "description": "Massa fresca com molho bolonhesa e queijo gratinado",
+  "price": 59.90,
+  "onlyInRestaurant": false,
+  "photoPath": "/images/pratos/lasanha-bolonhesa.png",
+  "restaurantId": "9b8a7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
+}</code></pre>
+    <h5>Resposta 404: Restaurante inexistente</h5>
+<pre><code>{
+  "timestamp": "2026-07-02T14:10:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Restaurant not found with id: 00000000-0000-0000-0000-000000000000"
+}</code></pre>
+  </div>
+
+  <div class="endpoint-card">
+    <span class="method m-delete">DELETE</span><span class="title">/user-types/{id}: Excluir Tipo de Usuário</span>
+    <p>Retorna <b>204 No Content</b> em caso de sucesso (sem corpo de resposta).</p>
+    <h5>Resposta 409: Tipo de usuário em uso</h5>
+<pre><code>{
+  "timestamp": "2026-07-02T14:12:00Z",
+  "status": 409,
+  "error": "Conflict",
+  "message": "Cannot delete user type because it is in use."
+}</code></pre>
+  </div>
+</section>
+
+<!-- ==================== 5. TRATAMENTO DE ERROS ==================== -->
+<section class="topic">
+  <h2 class="section-title">5. Tratamento de erros</h2>
+
+  <p>O tratamento de erros é centralizado em dois handlers globais
+  (<code>@RestControllerAdvice</code>): <code>GlobalExceptionHandler</code> (usuários,
+  restaurantes e itens do cardápio) e <code>UserTypeExceptionHandler</code> (tipos de
+  usuário). As exceções de negócio são lançadas pelo domínio e pelos casos de uso, e
+  convertidas em respostas HTTP com corpo padronizado.</p>
+
+  <h3 class="block">Formato padrão</h3>
+<pre><code>{
+  "timestamp": "2026-07-02T14:00:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Descrição detalhada do problema"
+}</code></pre>
+
+  <h3 class="block">Erros de Validação (400)</h3>
+  <p>Para falhas de Bean Validation (<code>@Valid</code>), o primeiro erro de campo é
+  retornado no formato <code>campo: mensagem</code>:</p>
+<pre><code>{
+  "timestamp": "2026-07-02T14:00:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "name: Name is required."
+}</code></pre>
+
+  <h3 class="block">Mapeamento de Exceções</h3>
+  <table>
+    <thead><tr><th>Exceção</th><th>HTTP / Situação</th></tr></thead>
+    <tbody>
+      <tr><td><code>UserNotFoundException</code></td><td>404: Usuário não encontrado</td></tr>
+      <tr><td><code>UserTypeNotFoundException</code></td><td>404: Tipo de usuário não encontrado</td></tr>
+      <tr><td><code>RestaurantNotFoundByIdException</code></td><td>404: Restaurante não encontrado</td></tr>
+      <tr><td><code>MenuItemNotFoundException</code></td><td>404: Item do cardápio não encontrado</td></tr>
+      <tr><td><code>UserAlreadyExistsException</code></td><td>409: E-mail de usuário já cadastrado</td></tr>
+      <tr><td><code>DuplicateUserTypeNameException</code></td><td>409: Nome de tipo de usuário já cadastrado</td></tr>
+      <tr><td><code>UserTypeInUseException</code></td><td>409: Tipo de usuário em uso não pode ser excluído</td></tr>
+      <tr><td><code>RestaurantAlreadyExistsException</code></td><td>409: Restaurante duplicado</td></tr>
+      <tr><td><code>UserTypeNotAllowedForRestaurantOwnerException</code></td><td>400: Dono do restaurante não pode ser CLIENT</td></tr>
+      <tr><td><code>InvalidUserTypeException</code></td><td>400: Dados inválidos do tipo de usuário</td></tr>
+      <tr><td><code>IllegalArgumentException</code> (validações do domínio)</td><td>400: Dados inválidos</td></tr>
+      <tr><td><code>MethodArgumentNotValidException</code></td><td>400: Erro de validação (Bean Validation)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ==================== 6. SWAGGER ==================== -->
+<section class="topic">
+  <h2 class="section-title">6. Documentação Swagger / OpenAPI</h2>
+
+  <p>A documentação interativa é gerada automaticamente pelo <b>SpringDoc OpenAPI
+  2.8.16</b>. Com a aplicação rodando, acesse:</p>
+  <ul>
+    <li><b>Swagger UI:</b> <code>http://localhost:8080/swagger-ui.html</code></li>
+    <li><b>Spec JSON:</b> <code>http://localhost:8080/v3/api-docs</code></li>
+  </ul>
+
+  <h3 class="block">Estratégia de Documentação</h3>
+  <p>Cada controller é anotado com <code>@Tag</code> para agrupamento e cada operação com
+  <code>@Operation</code> e <code>@ApiResponses</code>, descrevendo os códigos de resposta
+  possíveis (200, 201, 204, 400, 404, 409).</p>
+
+  <h3 class="block">Endpoints documentados no Swagger</h3>
+  <p>O Swagger documenta os 24 endpoints da API, agrupados em quatro tags:</p>
+  <table>
+    <thead><tr><th>Tag</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><b>User Types</b></td><td>User type management endpoints</td></tr>
+      <tr><td><b>Users</b></td><td>User management endpoints</td></tr>
+      <tr><td><b>Restaurants</b></td><td>Restaurant management endpoints</td></tr>
+      <tr><td><b>Menu Items</b></td><td>CRUD for restaurant menu items</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout success">
+    O Swagger UI permite executar qualquer endpoint diretamente pelo navegador com o botão
+    <b>"Try it out"</b>, exibindo os modelos de requisição/resposta e os códigos de status.
+  </div>
+</section>
+
+<!-- ==================== 7. DOCKER ==================== -->
+<section class="topic">
+  <h2 class="section-title">7. Configuração do Docker</h2>
+
+  <p>A containerização é composta por um <code>Dockerfile</code> (imagem da API) e um
+  <code>docker-compose.yml</code> (orquestração da API com o banco MySQL), ambos na raiz
+  do repositório.</p>
+
+  <h3 class="block">Dockerfile (multi-stage build)</h3>
+  <p>A imagem da API é construída em dois estágios, gerando uma imagem final enxuta,
+  apenas com o JRE e o JAR da aplicação:</p>
+<pre><code># Build stage
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn -B dependency:go-offline
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
+# Run stage
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+  <ul>
+    <li><b>Estágio de build:</b> usa Maven + JDK 21 para compilar e empacotar o projeto
+    (o cache de dependências é aproveitado ao copiar o <code>pom.xml</code> antes do código).</li>
+    <li><b>Estágio de execução:</b> usa apenas o JRE 21 (<code>eclipse-temurin:21-jre</code>),
+    reduzindo o tamanho da imagem final.</li>
+  </ul>
+
+  <h3 class="block">docker-compose.yml</h3>
+  <p>O Compose define dois serviços:</p>
+  <table>
+    <thead><tr><th>Serviço</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>mysql</code></td><td>Banco MySQL 8.4 com volume persistente
+      (<code>mysql_data</code>), healthcheck e carga automática dos scripts da pasta
+      <code>sql/</code> na primeira inicialização (detalhado na seção 3).</td></tr>
+      <tr><td><code>api</code></td><td>Aplicação GastroHub, construída a partir do
+      <code>Dockerfile</code>, exposta na porta <code>8080</code> (configurável via variável
+      <code>API_PORT</code>). Ativa o profile <code>prod</code>
+      (<code>SPRING_PROFILES_ACTIVE</code>), que aponta a conexão para o MySQL através das
+      variáveis de ambiente (<code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>,
+      <code>DB_USER</code>, <code>DB_PASSWORD</code>), e só inicia após o MySQL estar
+      saudável (<code>depends_on</code> com <code>condition: service_healthy</code>).</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Como subir o ambiente</h3>
+<pre><code>docker compose up --build</code></pre>
+  <p>O comando constrói a imagem da API, sobe o MySQL (com schema e dados de exemplo) e,
+  em seguida, a API em <code>http://localhost:8080</code>.</p>
+</section>
+
+<!-- ==================== 8. QUALIDADE ==================== -->
+<section class="topic">
+  <h2 class="section-title">8. Qualidade do código</h2>
+
+  <h3 class="block">Clean Architecture</h3>
+  <ul>
+    <li><b>Domínio independente:</b> as entidades de domínio não possuem anotações JPA nem
+    dependência de framework — a persistência usa entidades JPA próprias, convertidas por
+    métodos <code>fromDomain()</code> / <code>toDomain()</code>.</li>
+    <li><b>Inversão de dependência:</b> os casos de uso dependem de interfaces de gateway
+    (<code>UserGateway</code>, <code>UserTypeGateway</code>, <code>RestaurantGateway</code>,
+    <code>MenuItemGateway</code>); as implementações JPA ficam na infraestrutura.</li>
+    <li><b>Casos de uso pequenos e focados:</b> cada operação de negócio é um caso de uso
+    próprio (ex.: <code>CreateRestaurantUseCase</code>, <code>DeleteUserTypeUseCase</code>),
+    registrado como bean nas classes de configuração da infraestrutura.</li>
+  </ul>
+
+  <h3 class="block">Princípios SOLID Aplicados</h3>
+  <ul>
+    <li><b>S (Single Responsibility):</b> cada caso de uso executa uma única operação;
+    controllers tratam apenas o fluxo HTTP; mappers apenas convertem DTOs; validações
+    reutilizáveis são isoladas (ex.: <code>RestaurantDuplicationValidator</code>).</li>
+    <li><b>O (Open/Closed):</b> novas exceções de negócio podem ser adicionadas aos
+    handlers globais sem alterar os existentes; novos casos de uso não modificam os atuais.</li>
+    <li><b>L (Liskov Substitution):</b> qualquer implementação de um gateway pode substituir
+    a implementação JPA (por exemplo, um mock nos testes) sem que os casos de uso precisem
+    de ajustes.</li>
+    <li><b>I (Interface Segregation):</b> cada módulo possui seu próprio gateway com apenas
+    os métodos que utiliza, em vez de uma interface única de persistência.</li>
+    <li><b>D (Dependency Inversion):</b> a camada de aplicação depende de abstrações
+    (gateways), nunca de repositórios JPA concretos.</li>
+  </ul>
+
+  <h3 class="block">Outras Boas Práticas</h3>
+  <ul>
+    <li><b>Entidades autovalidadas:</b> factory methods <code>create()</code> /
+    <code>restore()</code> impedem a construção de objetos em estado inválido.</li>
+    <li><b>DTOs imutáveis:</b> requests e responses implementados como Java
+    <code>record</code>, separados por operação.</li>
+    <li><b>Validação na entrada:</b> <code>@Valid</code> + Bean Validation
+    (<code>@NotBlank</code>, <code>@NotNull</code>, <code>@Email</code>,
+    <code>@DecimalMin</code>) nos DTOs de request.</li>
+    <li><b>Senha nunca exposta:</b> o campo <code>password</code> não existe no DTO de
+    response de usuário.</li>
+    <li><b>Erros padronizados:</b> corpo de erro consistente em toda a API
+    (timestamp, status, error, message).</li>
+    <li><b>Fetch LAZY:</b> a associação usuário → tipo de usuário usa
+    <code>FetchType.LAZY</code>, evitando consultas desnecessárias (problema N+1).</li>
+    <li><b>Documentação viva:</b> anotações OpenAPI mantidas junto aos controllers.</li>
+  </ul>
+</section>
+
+<!-- ==================== 9. TESTES ==================== -->
+<section class="topic">
+  <h2 class="section-title">9. Testes automatizados</h2>
+
+  <p>Foram implementados <b>163 testes automatizados</b> (38 classes de teste) com
+  <b>JUnit 5 + Mockito + MockMvc</b>, distribuídos entre testes de unidade (domínio,
+  casos de uso, gateway e mappers) e testes de integração (controllers com MockMvc e
+  banco H2).</p>
+
+  <h3 class="block">Distribuição dos testes</h3>
+  <table>
+    <thead><tr><th>Camada / Classe de Teste</th><th>Tipo / Descrição</th></tr></thead>
+    <tbody>
+      <tr><td><code>domain/entity</code> — <code>UserTypeTest</code>, <code>UserTest</code>,
+          <code>RestaurantTest</code>, <code>MenuItemTest</code></td>
+          <td>Unitário: valida as regras das entidades de domínio (campos obrigatórios,
+          formato de e-mail, preço maior que zero, factory methods
+          <code>create</code>/<code>restore</code>) — 43 testes.</td></tr>
+      <tr><td><code>application/usecase/usertype/*</code> (5 classes)</td>
+          <td>Unitário: casos de uso de tipos de usuário com gateways mockados
+          (criação, duplicidade, exclusão, não encontrado) — 14 testes.</td></tr>
+      <tr><td><code>application/usecase/user/*</code> (7 classes)</td>
+          <td>Unitário: casos de uso de usuários (criação e atualização com e-mail
+          duplicado, busca por ID, e-mail e nome, exclusão de usuário inexistente)
+          — 13 testes.</td></tr>
+      <tr><td><code>application/usecase/restaurant/*</code> (6 classes)</td>
+          <td>Unitário: casos de uso de restaurantes (dono inexistente, dono CLIENT,
+          duplicidade, atualização, exclusão) — 18 testes.</td></tr>
+      <tr><td><code>application/usecase/menuitem/*</code> (6 classes)</td>
+          <td>Unitário: casos de uso de itens do cardápio (restaurante inexistente,
+          criação, busca, atualização, exclusão) — 13 testes.</td></tr>
+      <tr><td><code>infrastructure/persistence/gateway</code> —
+          <code>MenuItemGatewayImplTest</code></td>
+          <td>Persistência: gateway JPA de itens do cardápio contra o banco de teste
+          (save, busca por ID e por restaurante, atualização, exclusão) — 8 testes.</td></tr>
+      <tr><td><code>presentation/mapper/*</code> (4 classes)</td>
+          <td>Unitário: conversão domínio ⇄ DTO dos quatro módulos — 16 testes.</td></tr>
+      <tr><td><code>RestaurantControllerTest</code>, <code>MenuItemControllerTest</code>,
+          <code>UserControllerTest</code></td>
+          <td>Integração MVC: endpoints HTTP com MockMvc, cobrindo status codes e formato
+          das respostas — 30 testes.</td></tr>
+      <tr><td><code>UserTypeControllerIntegrationTest</code></td>
+          <td>Integração completa (<code>@SpringBootTest</code> +
+          <code>@AutoConfigureMockMvc</code> + H2): fluxo Controller → UseCase → Gateway →
+          JPA → H2 — 7 testes.</td></tr>
+      <tr><td><code>GastrohubApiApplicationTests</code></td>
+          <td>Contexto: verifica se o contexto Spring sobe corretamente — 1 teste.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="block">Cenários cobertos pelos testes</h3>
+  <ul>
+    <li>Criar tipo de usuário com sucesso e com nome duplicado (409)</li>
+    <li>Excluir tipo de usuário em uso (409) e inexistente (404)</li>
+    <li>Atualizar e buscar tipo de usuário por ID</li>
+    <li>Criar e atualizar usuário com e-mail já cadastrado (409)</li>
+    <li>Buscar usuário por ID, por e-mail e por nome; excluir usuário inexistente (404)</li>
+    <li>Criar restaurante com sucesso</li>
+    <li>Criar restaurante com dono inexistente (404) e dono da categoria CLIENT (400)</li>
+    <li>Criar restaurante duplicado — mesmo nome, dono, endereço e cozinha (409)</li>
+    <li>Listar, buscar por nome, atualizar e excluir restaurantes</li>
+    <li>Criar item do cardápio com restaurante inexistente (404)</li>
+    <li>CRUD completo de itens do cardápio e listagem por restaurante</li>
+    <li>Validações das entidades de domínio (campos obrigatórios, preço maior que zero)</li>
+    <li>Mapeamento correto entre entidades de domínio e DTOs</li>
+  </ul>
+
+  <h4>Executar os testes</h4>
+<pre><code>./mvnw test</code></pre>
+  <p>Resultado esperado:</p>
+<pre><code>Tests run: 163, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS</code></pre>
+
+  <div class="callout success">
+    Os testes de integração utilizam banco <b>H2 in-memory</b> com perfil dedicado,
+    configurado em <code>src/test/resources/application-test.properties</code>
+    (<code>ddl-auto=create-drop</code>, modo de compatibilidade MySQL). Não é necessário
+    nenhum software adicional para executar os testes.
+  </div>
+</section>
+
+<!-- ==================== 10. POSTMAN ==================== -->
+<section class="topic">
+  <h2 class="section-title">10. Collection Postman</h2>
+
+  <p>A collection do Postman está disponível no repositório, em
+  <code>docs/gastrohub.postman_collection.json</code>, com as requisições prontas para
+  todos os <b>24 endpoints</b> da API, organizadas em quatro pastas:
+  <b>UserType</b>, <b>User</b>, <b>Restaurant</b> e <b>MenuItem</b>.</p>
+
+  <h3 class="block">Como usar</h3>
+  <ol>
+    <li>Abra o Postman e clique em <b>Import</b>.</li>
+    <li>Selecione o arquivo <code>docs/gastrohub.postman_collection.json</code> do repositório.</li>
+    <li>Com a aplicação rodando em <code>http://localhost:8080</code>, execute as
+    requisições de cada pasta (os corpos de exemplo já vêm preenchidos).</li>
+  </ol>
+
+  <div class="callout info">
+    Alternativamente, todos os endpoints também podem ser testados pelo
+    <b>Swagger UI</b> (seção 6), sem instalação de nenhuma ferramenta.
+  </div>
+</section>
+
+<!-- ==================== 11. REPOSITÓRIO ==================== -->
+<section class="topic">
+  <h2 class="section-title">11. Repositório do Código</h2>
+
+  <h3 class="block">URL do Repositório</h3>
+  <p><b>https://github.com/GastroHubDev/gastrohub-api</b></p>
+
+  <h3 class="block">Conteúdo do Repositório</h3>
+  <ul>
+    <li><code>src/main</code>: código-fonte completo (domain, application, infrastructure, presentation)</li>
+    <li><code>src/test</code>: 163 testes automatizados</li>
+    <li><code>pom.xml</code>: configuração Maven e dependências</li>
+    <li><code>mvnw</code> / <code>mvnw.cmd</code>: Maven Wrapper (dispensa instalação do Maven)</li>
+    <li><code>Dockerfile</code> e <code>docker-compose.yml</code>: containerização da API e do banco MySQL</li>
+    <li><code>sql/</code>: scripts de schema e seed carregados pelo container MySQL</li>
+    <li><code>docs/</code>: relatório técnico e collection Postman</li>
+    <li><code>README.md</code>: documentação do projeto</li>
+  </ul>
+
+  <h3 class="block">Estrutura de Arquivos Principal</h3>
+<pre><code>.
+├── pom.xml
+├── mvnw / mvnw.cmd
+├── README.md
+├── Dockerfile
+├── docker-compose.yml
+├── sql/
+│   ├── 01-schema.sql                (DDL das tabelas — MySQL)
+│   └── 02-seed.sql                  (dados de exemplo)
+├── docs/
+│   └── gastrohub.postman_collection.json
+└── src/
+    ├── main/
+    │   ├── java/br/com/fiap/gastrohubapi/
+    │   │   ├── GastrohubApiApplication.java
+    │   │   ├── domain/
+    │   │   │   ├── entity/          (User, UserType, Restaurant, MenuItem)
+    │   │   │   ├── enums/           (BaseCategory, KitchenType)
+    │   │   │   └── exception/       (10 exceções de negócio)
+    │   │   ├── application/
+    │   │   │   ├── gateway/         (4 contratos de persistência)
+    │   │   │   └── usecase/         (user, usertype, restaurant, menuitem)
+    │   │   ├── infrastructure/
+    │   │   │   ├── config/          (registro dos use cases como beans)
+    │   │   │   └── persistence/     (entity, repository, gateway)
+    │   │   └── presentation/
+    │   │       ├── controller/      (4 REST controllers)
+    │   │       ├── dto/             (request / response records)
+    │   │       ├── mapper/
+    │   │       └── exceptionhandler/
+    │   └── resources/
+    │       ├── application.properties       (padrão: H2 local)
+    │       └── application-prod.properties  (profile prod: MySQL)
+    └── test/
+        ├── java/br/com/fiap/gastrohubapi/   (38 classes de teste)
+        └── resources/
+            └── application-test.properties</code></pre>
+</section>
+
+<!-- ==================== 12. GUIA PASSO A PASSO ==================== -->
+<section class="topic">
+  <h2 class="section-title">12. Guia passo a passo para testar o projeto</h2>
+
+  <p>Este guia reúne tudo que é necessário para clonar, subir e testar o projeto do zero
+  pelo Swagger UI.</p>
+
+  <div class="callout info">
+    <b>Pré-requisitos:</b> para executar com containers, apenas <b>Docker</b> (com o plugin
+    Compose). Para executar localmente sem Docker, apenas <b>Java 21</b> (JDK) — o projeto
+    usa o Maven Wrapper, portanto não é necessário instalar o Maven.
+  </div>
+
+  <h3 class="block">Etapa 1: Clonar o repositório</h3>
+  <p>Abra o terminal (Prompt de Comando, PowerShell ou Terminal do Mac/Linux) e execute:</p>
+<pre><code>git clone https://github.com/GastroHubDev/gastrohub-api.git
+cd gastrohub-api</code></pre>
+
+  <h3 class="block">Etapa 2: Subir a aplicação</h3>
+
+  <h4>Opção A: Com Docker (API + MySQL)</h4>
+  <p>Na pasta do projeto, execute:</p>
+<pre><code>docker compose up --build</code></pre>
+  <p>O Compose constrói a imagem da API e sobe o container MySQL 8.4 com o schema e os
+  dados de exemplo carregados automaticamente (seção 7).</p>
+
+  <h4>Opção B: Execução local (H2 in-memory)</h4>
+  <p>Sem Docker, execute com o Maven Wrapper:</p>
+<pre><code># Linux / macOS
+./mvnw spring-boot:run
+
+# Windows
+.\mvnw.cmd spring-boot:run</code></pre>
+  <p>Nesta opção a aplicação usa o banco H2 in-memory, criado automaticamente pelo
+  Hibernate — nenhuma configuração de banco é necessária.</p>
+
+  <p>Em ambas as opções, a aplicação iniciará em <code>http://localhost:8080</code>.</p>
+
+  <h3 class="block">Etapa 3: Testar pelo Swagger UI</h3>
+  <h4>3.1: Acessar o Swagger</h4>
+<pre><code>http://localhost:8080/swagger-ui.html</code></pre>
+  <p>A página exibirá todos os endpoints documentados da API, agrupados pelas tags
+  <b>User Types</b>, <b>Users</b>, <b>Restaurants</b> e <b>Menu Items</b>.</p>
+
+  <h4>3.2: Criar um tipo de usuário</h4>
+  <ol>
+    <li>Clique em <b>POST /user-types</b></li>
+    <li>Clique no botão <b>"Try it out"</b></li>
+    <li>Substitua o corpo de exemplo pelo JSON abaixo e clique em <b>"Execute"</b>:</li>
+  </ol>
+<pre><code>{
+  "name": "Dono de Restaurante",
+  "baseCategory": "OWNER"
+}</code></pre>
+  <p>A resposta esperada é <b>201 Created</b>. <b>Copie o <code>id</code> (UUID) retornado</b>
+  para o próximo passo.</p>
+
+  <h4>3.3: Criar um usuário dono de restaurante</h4>
+  <p>Em <b>POST /users</b>, informe o tipo criado no passo anterior:</p>
+<pre><code>{
+  "name": "Maria Oliveira",
+  "email": "maria.oliveira@email.com",
+  "password": "senha123",
+  "userTypeId": "&lt;UUID copiado no passo 3.2&gt;"
+}</code></pre>
+  <p>A resposta será <b>201 Created</b> com o <code>id</code> (UUID) do usuário.
+  <b>Copie esse UUID</b> para o próximo passo.</p>
+
+  <h4>3.4: Criar um restaurante</h4>
+  <p>Em <b>POST /restaurants</b>, use o UUID do usuário como <code>restaurantOwnerId</code>:</p>
+<pre><code>{
+  "name": "Cantina da Nonna",
+  "address": "Av. Paulista, 1000 - São Paulo/SP",
+  "kitchenType": "ITALIAN",
+  "openingHours": "Seg a Dom, das 11h às 23h",
+  "restaurantOwnerId": "&lt;UUID copiado no passo 3.3&gt;"
+}</code></pre>
+  <p>A resposta será <b>201 Created</b>. <b>Copie o UUID do restaurante</b>.</p>
+
+  <h4>3.5: Criar um item do cardápio</h4>
+  <p>Em <b>POST /menu-items</b>, use o UUID do restaurante:</p>
+<pre><code>{
+  "name": "Lasanha à Bolonhesa",
+  "description": "Massa fresca com molho bolonhesa e queijo gratinado",
+  "price": 59.90,
+  "onlyInRestaurant": false,
+  "photoPath": "/images/pratos/lasanha-bolonhesa.png",
+  "restaurantId": "&lt;UUID copiado no passo 3.4&gt;"
+}</code></pre>
+
+  <h4>3.6: Explorar os demais endpoints</h4>
+  <ul>
+    <li><b>GET /restaurants</b>: lista todos os restaurantes</li>
+    <li><b>GET /menu-items/restaurant/{restaurantId}</b>: lista o cardápio do restaurante</li>
+    <li><b>GET /users/search?name=Maria</b>: busca usuários pelo nome</li>
+    <li><b>PUT</b> e <b>DELETE</b> nos módulos para atualizar/excluir registros</li>
+    <li>Teste os cenários de erro: criar restaurante com dono CLIENT (400), excluir tipo de
+    usuário em uso (409), buscar ID inexistente (404)</li>
+  </ul>
+
+  <h4>3.7: Inspecionar o banco (opcional)</h4>
+  <p>Na execução local (Opção B), o console do H2 está habilitado em:</p>
+<pre><code>http://localhost:8080/h2-console
+
+JDBC URL:  jdbc:h2:mem:gastrohub
+User:      sa
+Senha:     (em branco)</code></pre>
+
+  <h3 class="block">Etapa 4: Executar os testes automatizados</h3>
+<pre><code># Linux / macOS
+./mvnw test
+
+# Windows
+.\mvnw.cmd test</code></pre>
+
+  <div class="callout info">
+    <b>Observação:</b> na execução local com H2 (Opção B), o banco é in-memory e os dados
+    são perdidos ao reiniciar a aplicação — repita as etapas 3.2 a 3.5 após cada reinício.
+  </div>
+</section>
+
+<!-- ==================== 13. OBSERVAÇÕES ==================== -->
+<section class="topic">
+  <h2 class="section-title">13. Observações e Limitações conhecidas</h2>
+
+  <p>Esta seção documenta limitações identificadas durante o desenvolvimento e os testes da
+  Fase 2, que estão fora do escopo atual ou serão tratadas antes da entrega final.</p>
+
+  <h3 class="block">Banco H2 na execução local</h3>
+  <p>O banco definitivo de produção é o <b>MySQL em container</b> (seções 3 e 7): no
+  ambiente Docker, o Compose ativa o profile <code>prod</code>
+  (<code>application-prod.properties</code>), que parametriza a conexão pelas variáveis de
+  ambiente <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>,
+  <code>DB_USER</code> e <code>DB_PASSWORD</code>. Na execução local de desenvolvimento e
+  nos testes automatizados, a aplicação utiliza <b>H2 in-memory</b>, cujos dados são
+  perdidos a cada reinício.</p>
+
+  <h3 class="block">Ausência de autenticação</h3>
+  <p>Nesta versão não há camada de segurança: todos os endpoints são públicos.</p>
+
+  <h3 class="block">Senha armazenada sem hash</h3>
+  <p>A senha do usuário é validada como obrigatória e nunca retornada nas respostas, porém
+  ainda é persistida sem algoritmo de hash. O hashing poderá ser incorporado em evolução
+  futura, junto com uma camada de autenticação.</p>
+
+  <h3 class="block">Ausência de paginação</h3>
+  <p>Os endpoints de listagem (<code>GET /users</code>, <code>GET /restaurants</code>,
+  <code>GET /menu-items</code> etc.) retornam todos os registros sem paginação. Em fases
+  futuras será implementada a paginação com <code>Pageable</code>.</p>
+
+  <h3 class="block">Relacionamentos por referência de ID</h3>
+  <p>As associações restaurante → dono e item do cardápio → restaurante são mantidas por
+  UUID (validado nos casos de uso), sem chave estrangeira física no banco. A integridade
+  referencial é garantida em nível de aplicação.</p>
+</section>
+
+</div>
+</body>
+</html>

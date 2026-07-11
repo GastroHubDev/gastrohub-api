@@ -1,9 +1,10 @@
 package br.com.fiap.gastrohubapi.application.usecase.user;
 
+import java.util.UUID;
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
 import br.com.fiap.gastrohubapi.application.gateway.UserTypeGateway;
 import br.com.fiap.gastrohubapi.application.usecase.user.input.NewUserDTO;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.UserAlreadyExistsException;
@@ -21,6 +22,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock
     private UserGateway userGateway;
@@ -33,7 +36,7 @@ class CreateUserUseCaseTest {
     private static final String NAME = "Joao";
     private static final String EMAIL = "Joao@test.com";
     private static final String PASSWORD = "password123";
-    private static final Long USER_TYPE_ID = 1L;
+    private static final UUID USER_TYPE_ID = TYPE_ID_1;
 
     private NewUserDTO input;
     private User expectedUser;

@@ -1,7 +1,7 @@
 package br.com.fiap.gastrohubapi.application.usecase.user;
 
 import br.com.fiap.gastrohubapi.application.gateway.UserGateway;
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.domain.exception.UserNotFoundException;
@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FindUserByIdUseCaseTest {
+    private static final UUID TYPE_ID_1 = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
 
     @Mock
     private UserGateway userGateway;
@@ -35,7 +37,7 @@ class FindUserByIdUseCaseTest {
         useCase = new FindUserByIdUseCase(userGateway); 
         userId = UUID.randomUUID();
 
-        UserType userType = UserType.restore(1L, "CLIENT", BaseCategory.CLIENT);
+        UserType userType = UserType.restore(TYPE_ID_1, "CLIENT", BaseCategory.CLIENT);
         expectedUser = User.create("Joao", "v@test.com", "123", userType);
     }
 

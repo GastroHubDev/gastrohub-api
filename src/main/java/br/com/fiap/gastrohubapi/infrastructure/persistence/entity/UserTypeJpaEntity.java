@@ -1,16 +1,18 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.entity;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_type")
 public class UserTypeJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -22,12 +24,12 @@ public class UserTypeJpaEntity {
     protected UserTypeJpaEntity() {
     }
 
-    public UserTypeJpaEntity(Long id) {
+    public UserTypeJpaEntity(UUID id) {
         this.id = id;
     }
 
 
-    public UserTypeJpaEntity(Long id, String name, BaseCategory baseCategory) {
+    public UserTypeJpaEntity(UUID id, String name, BaseCategory baseCategory) {
         this.id = id;
         this.name = name;
         this.baseCategory = baseCategory;
@@ -45,7 +47,7 @@ public class UserTypeJpaEntity {
         return UserType.restore(id, name, baseCategory);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
