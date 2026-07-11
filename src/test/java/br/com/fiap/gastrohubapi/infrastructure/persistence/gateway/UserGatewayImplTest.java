@@ -1,6 +1,6 @@
 package br.com.fiap.gastrohubapi.infrastructure.persistence.gateway;
 
-import br.com.fiap.gastrohubapi.domain.entity.BaseCategory;
+import br.com.fiap.gastrohubapi.domain.enums.BaseCategory;
 import br.com.fiap.gastrohubapi.domain.entity.User;
 import br.com.fiap.gastrohubapi.domain.entity.UserType;
 import br.com.fiap.gastrohubapi.infrastructure.persistence.entity.UserTypeJpaEntity;
