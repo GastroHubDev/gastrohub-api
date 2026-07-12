@@ -1,151 +1,254 @@
 # GastroHub API
 
-Backend API for the FIAP PostTech Tech Challenge — Phase 2.
+Backend API for managing users, user types, restaurants, and menu items.
 
-The project provides restaurant management features using Java, Spring Boot, Clean Architecture, automated tests, API documentation, and Docker.
+This project was developed as part of the **FIAP Post Tech -- Phase 2
+Tech Challenge**, using **Spring Boot**, **Clean Architecture**,
+automated tests, Docker, and Swagger/OpenAPI.
 
-## Project Status
+------------------------------------------------------------------------
 
-Project setup in progress.
+## Features
 
-Current focus:
+-   User management
+-   User type management
+-   Restaurant management
+-   Menu item management
+-   Swagger / OpenAPI documentation
+-   Postman collection
+-   H2 database for development and tests
+-   MySQL 8.4 with Docker Compose
+-   Unit and integration tests
+-   Global exception handling
 
-* Base Spring Boot project setup
-* Clean Architecture package structure
-* User Type CRUD
-* User CRUD
-* Restaurant CRUD
-* Menu Item CRUD
-* Swagger/OpenAPI documentation
-* Automated tests
-* Docker environment
+------------------------------------------------------------------------
 
 ## Tech Stack
 
-* Java 21
-* Spring Boot
-* Maven
-* Spring Web
-* Spring Data JPA
-* Bean Validation
-* PostgreSQL
-* Docker
-* JUnit 5
-* Swagger/OpenAPI
+-   Java 21
+-   Spring Boot 3.5.15
+-   Spring Web
+-   Spring Data JPA
+-   Spring Validation
+-   H2 Database
+-   MySQL 8.4
+-   Springdoc OpenAPI
+-   JUnit 5
+-   Mockito
+-   MockMvc
+-   Maven
+-   Docker
+-   Docker Compose
+
+------------------------------------------------------------------------
 
 ## Architecture
 
-The project follows Clean Architecture principles, separating business rules from technical details.
-
-```text
-br.com.fiap.gastrohubapi
+``` text
+src/main/java/br/com/fiap/gastrohubapi
 ├── domain
-│   ├── entity
-│   └── exception
 ├── application
-│   ├── gateway
-│   └── usecase
 ├── infrastructure
-│   ├── config
-│   └── persistence
-│       ├── entity
-│       ├── gateway
-│       └── repository
 └── presentation
-    ├── controller
-    ├── dto
-    │   ├── request
-    │   └── response
-    └── mapper
 ```
+
+  -----------------------------------------------------------------------
+Layer                 Responsibility
+  --------------------- -------------------------------------------------
+Domain                Business entities, enums and exceptions
+
+Application           Use cases and gateway contracts
+
+Infrastructure        JPA entities, repositories and gateway
+implementations
+
+Presentation          Controllers, DTOs, mappers and exception handlers
+-----------------------------------------------------------------------
+
+Dependency flow:
+
+``` text
+Presentation → Application → Domain
+Infrastructure → Application
+```
+
+------------------------------------------------------------------------
 
 ## Main Modules
 
-### User Type
+-   User
+-   UserType
+-   Restaurant
+-   MenuItem
 
-Responsible for managing user classifications.
-
-Examples:
-
-* Client
-* Restaurant Owner
-
-### User
-
-Responsible for managing application users.
-
-### Restaurant
-
-Responsible for managing restaurant data.
-
-### Menu Item
-
-Responsible for managing restaurant menu items.
-
-## Requirements
-
-Before running the project, make sure you have installed:
-
-* Java 21
-* Maven
-* Docker
-* Git
-
-## How to Run Locally
-
-Clone the repository:
-
-```bash
-git clone https://github.com/GastroHubDev/gastrohub-api.git
-```
-
-Enter the project folder:
-
-```bash
-cd gastrohub-api
-```
-
-Run the application:
-
-```bash
-./mvnw spring-boot:run
-```
-
-On Windows:
-
-```bash
-mvnw.cmd spring-boot:run
-```
-
-## Running Tests
-
-```bash
-./mvnw test
-```
-
-On Windows:
-
-```bash
-mvnw.cmd test
-```
+------------------------------------------------------------------------
 
 ## API Documentation
 
-Swagger/OpenAPI documentation will be available after running the application.
+Swagger UI:
 
-Default URL:
-
-```text
+``` text
 http://localhost:8080/swagger-ui.html
 ```
 
-## Docker
+OpenAPI:
 
-Docker configuration will be added to run the API and database together.
-
-Expected command:
-
-```bash
-docker compose up
+``` text
+http://localhost:8080/v3/api-docs
 ```
 
+------------------------------------------------------------------------
+
+## Running the Project
+
+### Requirements
+
+-   Java 21
+-   Docker + Docker Compose (optional)
+
+### Run locally (H2)
+
+Windows
+
+``` powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Linux/macOS
+
+``` bash
+./mvnw spring-boot:run
+```
+
+Application:
+
+``` text
+http://localhost:8080
+```
+
+Swagger:
+
+``` text
+http://localhost:8080/swagger-ui.html
+```
+
+H2 Console:
+
+``` text
+http://localhost:8080/h2-console
+```
+
+### Run with Docker
+
+``` bash
+docker compose up --build
+```
+
+This starts:
+
+-   MySQL 8.4
+-   GastroHub API
+
+Stop containers:
+
+``` bash
+docker compose down
+```
+
+Reset database:
+
+``` bash
+docker compose down -v
+```
+
+------------------------------------------------------------------------
+
+## Database
+
+The project supports:
+
+-   H2 (development and tests)
+-   MySQL 8.4 (Docker / production profile)
+
+Configuration files:
+
+``` text
+src/main/resources/application.properties
+src/main/resources/application-prod.properties
+src/test/resources/application-test.properties
+```
+
+------------------------------------------------------------------------
+
+## Running Tests
+
+Run all tests:
+
+Windows
+
+``` powershell
+.\mvnw.cmd test
+```
+
+Linux/macOS
+
+``` bash
+./mvnw test
+```
+
+Run a specific test:
+
+``` bash
+./mvnw -Dtest=UserTypeControllerIntegrationTest test
+```
+
+Tests include:
+
+-   Domain
+-   Use Cases
+-   Persistence
+-   Controllers
+-   Mappers
+-   Spring Context
+
+------------------------------------------------------------------------
+
+## Docker
+
+The project includes:
+
+``` text
+Dockerfile
+docker-compose.yml
+```
+
+Docker Compose provisions:
+
+-   MySQL 8.4
+-   GastroHub API
+
+SQL initialization scripts:
+
+``` text
+sql/01-schema.sql
+sql/02-seed.sql
+```
+
+------------------------------------------------------------------------
+
+## Postman
+
+``` text
+postman/GastroHub_API.postman_collection.json
+```
+
+------------------------------------------------------------------------
+
+## Documentation
+
+Technical report:
+
+``` text
+docs/RelatorioTecnicoGastroHubFase2.html
+docs/RelatorioTecnicoGastroHubFase2.pdf
+```

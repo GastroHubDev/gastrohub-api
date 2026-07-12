@@ -1,0 +1,48 @@
+package br.com.fiap.gastrohubapi.infrastructure.config;
+
+import br.com.fiap.gastrohubapi.application.gateway.MenuItemGateway;
+import br.com.fiap.gastrohubapi.application.gateway.RestaurantGateway;
+import br.com.fiap.gastrohubapi.application.usecase.menuitem.*;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.gateway.MenuItemGatewayImpl;
+import br.com.fiap.gastrohubapi.infrastructure.persistence.repository.MenuItemJpaRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class MenuItemUseCaseConfig {
+
+    @Bean
+    public MenuItemGateway menuItemGateway(MenuItemJpaRepository repository) {
+        return new MenuItemGatewayImpl(repository);
+    }
+
+    @Bean
+    public CreateMenuItemUseCase createMenuItemUseCase(MenuItemGateway gateway, RestaurantGateway restaurantGateway) {
+        return new CreateMenuItemUseCase(gateway, restaurantGateway);
+    }
+
+    @Bean
+    public FindMenuItemByIdUseCase findMenuItemByIdUseCase(MenuItemGateway gateway) {
+        return new FindMenuItemByIdUseCase(gateway);
+    }
+
+    @Bean
+    public FindAllMenuItemsUseCase findAllMenuItemsUseCase(MenuItemGateway gateway) {
+        return new FindAllMenuItemsUseCase(gateway);
+    }
+
+    @Bean
+    public FindMenuItemsByRestaurantUseCase findMenuItemsByRestaurantUseCase(MenuItemGateway gateway) {
+        return new FindMenuItemsByRestaurantUseCase(gateway);
+    }
+
+    @Bean
+    public UpdateMenuItemUseCase updateMenuItemUseCase(MenuItemGateway gateway) {
+        return new UpdateMenuItemUseCase(gateway);
+    }
+
+    @Bean
+    public DeleteMenuItemUseCase deleteMenuItemUseCase(MenuItemGateway gateway) {
+        return new DeleteMenuItemUseCase(gateway);
+    }
+}
