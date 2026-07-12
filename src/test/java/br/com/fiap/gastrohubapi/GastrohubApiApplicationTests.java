@@ -1,13 +1,13 @@
 package br.com.fiap.gastrohubapi;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+@SpringBootTest
 class GastrohubApiApplicationTests {
 
-    @Test
-    void applicationClassExists() {
-        assertNotNull(GastrohubApiApplication.class);
-    }
+	@Test
+	void contextLoads() {
+	}
+
 }
