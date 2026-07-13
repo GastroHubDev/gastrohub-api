@@ -1,0 +1,21 @@
+Link do vídeo de apresentação:
+   https://youtu.be/wW2IT7NuN4s?si=7yzHaEoUEMV7--xw
+
+Github:
+  https://github.com/GastroHubDev/gastrohub-api/tree/main#gastrohub--fiap-postech
+
+Alunos:
+  Aluno: Geovanne de Souza Paes
+  RM: 372009
+
+  Aluno: Rafael Teles Espindola
+  RM: 370772
+
+  Aluno: Victor Silva Mazzola
+  RM: 370764
+
+  Aluno: Gideão Lucas de Souza Silva
+  RM: 374230
+
+  Aluno: Luis Filipi Santos Souza
+  RM: 372233
